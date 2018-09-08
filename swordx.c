@@ -87,7 +87,6 @@ int main (int argc, char *argv[]) {
 /* Print any remaining command line arguments (not options). sono quindi i file di input */
   if (optind < argc)
     {
-	/*initialize files[]*/
 	int size = (argc - optind);
 	files = calloc(size, sizeof(char**));
 	int z = 0;
