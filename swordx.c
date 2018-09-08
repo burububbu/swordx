@@ -101,10 +101,6 @@ int main (int argc, char *argv[]) {
 	free(files);
     }
   exit (0);
-
-
-
-
 }
 				
 		
