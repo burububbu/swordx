@@ -1,7 +1,10 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <stdlib.h>
+#include <string.h>
 #include <getopt.h>
+
+#include "utils.h"
 
 /* flags */
 
@@ -14,7 +17,10 @@ static char *fileToExclude;
 static int numMin;
 static char *fileToIgnore;
 static char *logFile;
-static char *outputFile;
+char *outputFile = "sword.out";
+
+void sort();
+
 
 //static char **files;
 
@@ -24,6 +30,7 @@ static char *outputFile;
  * 
  * */
 int main (int argc, char *argv[]) {
+	list *sword = createList();
 	char **files;
 	int c;
 	while (1){
@@ -92,14 +99,41 @@ int main (int argc, char *argv[]) {
 	int z = 0;
     printf ("input files: \n ");
     while (optind < argc){
-		files[z] = argv[optind++];
-		z++;
-		printf ("%s ", files[z-1]);     
+		files[z] = argv[optind];
+		optind++;
+		printf ("%s ", files[z]);     
 		putchar ('\n');
+		z++;
 		}
+	
+	for (int j= 0; j < z; j++){
+		updateList(sword, files[j]);
+		}	
 	free(files);
+	
+	writeOnFile(sword, outputFile);
+	//sort();
+	
     }
   exit (0);
+}
+
+void sort(){
+	/*se quindi il sort è in normale ordine alfabetico*/
+	char command[80];
+	strcpy(command, "/bin/sh -c sort -o ");
+	char inout[61];
+	if (sort_flag == 0){
+		/*sort file on bash -> sort -o input output*/
+		strcpy(inout, outputFile);
+		strcat(inout, " ");
+		strcat(inout, outputFile);
+		strcat(command, inout);
+		system(command);
+	}
+	/*se quindi il sort è in base al numero di occorrenza*/
+	else {
+		}
 }
 				
 		
