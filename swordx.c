@@ -12,12 +12,20 @@ void openFile(const char*);
 
 int main(void)
 {
-	char buf[2000];
+	FILE *fd;
+	char buf[200];
 	char *res;
-	list* swordx = listCreate();
-	
-	/*FILE *f = openFile("D:/Michele/Documents/Università/2° Anno/Secondo Semestre/Sistemi Operativi/Sistemi Operativi Laboratorio/Esercizi/Progetto/test.txt");
-	
+
+
+	/* apre il file */
+	fd=fopen("/home/michele/swordx/test.txt", "r");
+	if( fd==NULL ) {
+    perror("Errore in apertura del file");
+    exit(1);
+    }
+
+
+	/* legge e stampa ogni riga */
 	while(1) 
 	{
 		res = fgets(buf, 2000, f);
@@ -25,13 +33,13 @@ int main(void)
 		  break;
 	  
 		storeString(swordx,buf);
-	}*/
-	const char* s = "D:/Michele/Documents/Università/2° Anno/Secondo Semestre/Sistemi Operativi/Sistemi Operativi Laboratorio/Esercizi/Progetto";
-	openFile(s);
-	//fclose(f);
-	
-	//create the file swordnordered.out (it isn't ordered)
-	/*		
+	}
+
+
+	/* chiude il file */
+	fclose(fd);
+
+	//create the file swordnordered.out (it isn't ordered)		
 	int file_created;
 	
 	file_created=creat("swordnordered.out", 0644);
@@ -73,36 +81,5 @@ int main(void)
 	
 	system("/bin/sh -c sort  <./swordnordered.out > sword.out");
 	
-	if (remove("swordnordered.out") != 0) printf("Unable to delete the file");*/
-	
-}
-
-void openFile(const char *path)
-{
-	DIR* d = opendir(path);
-	struct dirent *pent;
-
-	if (!d)
-	{
-	  printf ("opendir() failure; terminating");
-	  exit(1);
-	}
-	 
-	while ((pent=readdir(d)))
-	{
-		printf("%s\n", pent->d_name);
-	}
- 
- 
- closedir(d);
-	/* open the File */
-	/*FILE *fd = fopen(path, "r");
-	
-	if( fd==NULL ) 
-	{
-		perror("Errore in apertura del file");
-		exit(1);
-	}
-	else
-		return fd;*/
+	if (remove("swordnordered.out") != 0) printf("Unable to delete the file");
 }
