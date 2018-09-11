@@ -15,10 +15,10 @@ int main(void)
 	FILE *fd;
 	char buf[200];
 	char *res;
-
+	list* swordx = listCreate();
 
 	/* apre il file */
-	fd=fopen("/home/michele/swordx/test.txt", "r");
+	fd=fopen("/home/michele/swordx/test", "r");
 	if( fd==NULL ) {
     perror("Errore in apertura del file");
     exit(1);
@@ -28,7 +28,7 @@ int main(void)
 	/* legge e stampa ogni riga */
 	while(1) 
 	{
-		res = fgets(buf, 2000, f);
+		res = fgets(buf, 2000, fd);
 		if( res==NULL )
 		  break;
 	  
@@ -41,7 +41,7 @@ int main(void)
 
 	//create the file swordnordered.out (it isn't ordered)		
 	int file_created;
-	
+	int i;
 	file_created=creat("swordnordered.out", 0644);
 	if(file_created == 1) {printf("error");}
 	
@@ -59,7 +59,7 @@ int main(void)
 	
 	node *po = swordx -> first; //returns first node
 	
-	while (i < countWord(swordx,buf))
+	while (i < countWord(buf))
 	{
 		fputs((po -> word), fp);
 		int number = (po -> occurrence);
