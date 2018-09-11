@@ -6,16 +6,28 @@
 #include <unistd.h>
 #include <dirent.h>
 #include "utils.h"
+#include "global.h"
+
+int recursive_flag;
+int follow_flag;
+int alpha_flag;
+char *fileToExclude;
+int numMin;
+char *fileToIgnore;
+char *logFile;
+
 
 /* controlla che il nome sia un file o una directory, nel caso in cui fosse una directory */
 void checkName(list* lst, char* filename){
-	
+	/*printf("\n il flag è %d", recursive_flag);
+	printf("\n il file da escludere è %s", fileToExclude);
+	*/
 	/* se NON è una directory fa l'update della lista passa a updateList il file, se no
 	 *  apre la directory, mette tutti i file nella directory in un'array di file
 	 * fa l'updateList su ognuno di loro */
 	 
 	 // 0 false 1 true
-	if( isDirectory(filename)== 0 ){
+	if( isDirectory(filename)== 0){
 		updateList(lst, filename);
 	}
 	else{
@@ -70,6 +82,7 @@ int isDirectory(char *path) {
 }
 
 int fileInDirUpdate(list* lst, char* filename){
+	printf("\n il file da escludere è %s \n", fileToExclude);
 	DIR *dp;
 	struct dirent *ep;
 	dp = opendir (filename);
@@ -79,18 +92,22 @@ int fileInDirUpdate(list* lst, char* filename){
 			printf (ep -> d_name);
 			//printf ("\n");
 			/* concatenare path/file */
-			int sizePath =  strlen(filename) + strlen(ep -> d_name);
-			char name[sizePath];
-			strcpy(name, filename);
-			strcat(name, ep -> d_name );
-			if (isRegular(name) == 1){
-				printf(" è regolare\n quindi \n");
-				updateList(lst, name); 
+			if (strcmp(ep -> d_name, fileToExclude) == 0){
+				 printf ("\n escludo il file %s dalla statistica\n", ep -> d_name);
 			}
-			else{
-				 printf(" non è regolare\n"); 
-			}
-			
+			else {
+				int sizePath =  strlen(filename) + strlen(ep -> d_name);
+				char name[sizePath];
+				strcpy(name, filename);
+				strcat(name, ep -> d_name );
+				if (isRegular(name) == 1){
+					printf(" è regolare\n quindi \n");
+					updateList(lst, name);
+					}
+				else{
+					 printf(" non è regolare\n"); 
+				}		
+		}
 			
     }
       (void) closedir (dp);

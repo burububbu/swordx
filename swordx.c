@@ -5,18 +5,21 @@
 #include <getopt.h>
 
 #include "utils.h"
+#include "global.h"
 
 /* flags */
 
-static int recursive_flag;
-static int follow_flag;
-static int alpha_flag;
+int recursive_flag;
+int follow_flag;
+int alpha_flag;
+
 static int sort_flag;
 
-static char *fileToExclude;
-static int numMin;
-static char *fileToIgnore;
-static char *logFile;
+char *fileToExclude;
+int numMin;
+char *fileToIgnore;
+char *logFile;
+
 char *outputFile = "sword.out";
 
 void sort();
@@ -90,7 +93,6 @@ int main (int argc, char *argv[]) {
 				abort ();
 			 }
 	}
-	
 /* Print any remaining command line arguments (not options). sono quindi i file di input */
   if (optind < argc)
     {
@@ -105,15 +107,14 @@ int main (int argc, char *argv[]) {
 		putchar ('\n');
 		z++;
 		}
-	
 	for (int j= 0; j < z; j++){
 		checkName(sword, files[j]);
 		}
 	free(files);
 	writeOnFile(sword, outputFile);
 	//sort();
-	
     }
+  else("There aren't input files");
   exit (0);
 }
 
