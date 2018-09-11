@@ -107,10 +107,9 @@ int main (int argc, char *argv[]) {
 		}
 	
 	for (int j= 0; j < z; j++){
-		updateList(sword, files[j]);
-		}	
+		checkName(sword, files[j]);
+		}
 	free(files);
-	
 	writeOnFile(sword, outputFile);
 	//sort();
 	

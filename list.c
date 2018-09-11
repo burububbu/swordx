@@ -40,14 +40,6 @@ printf("Last: %s\n",lst -> last -> word);
 	
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
 	//node *n = createNode(str);
 	//printf("\n la size è %i \n", size);
 	//if (size == 0){
