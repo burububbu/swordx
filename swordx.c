@@ -24,9 +24,6 @@ char *outputFile = "sword.out";
 
 void sort();
 
-
-//static char **files;
-
 /*
  * argc num parametri
  * argv array di puntatori ai parametri (parti da argv[1])

@@ -19,9 +19,6 @@ char *logFile;
 
 /* controlla che il nome sia un file o una directory, nel caso in cui fosse una directory */
 void checkName(list* lst, char* filename){
-	/*printf("\n il flag è %d", recursive_flag);
-	printf("\n il file da escludere è %s", fileToExclude);
-	*/
 	/* se NON è una directory fa l'update della lista passa a updateList il file, se no
 	 *  apre la directory, mette tutti i file nella directory in un'array di file
 	 * fa l'updateList su ognuno di loro */
@@ -39,7 +36,6 @@ void updateList(list* lst, char* filename){
 	
 	FILE *fd;
 	char buf[40];
-	/*open the file*/
 	fd = fopen(filename, "r");
 	
 	if( fd==NULL ){
@@ -47,7 +43,6 @@ void updateList(list* lst, char* filename){
 		exit(1);
 	}
 	else {
-	//printf("\n non ci sono problemi con l'apertura del file %s", filename);}
     /* assumes no word exceeds length of 40 */
     while (fscanf(fd, " %40s", buf) == 1) {
         addWord(lst, buf);
@@ -56,7 +51,6 @@ void updateList(list* lst, char* filename){
 }
 
 void writeOnFile(list* lst, char* outputFile){
-	/* open/create output file */	
 	FILE *fp;
 	fp = fopen(outputFile ,"a");
 	if (fp == NULL){
