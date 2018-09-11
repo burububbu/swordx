@@ -1,145 +1,108 @@
 #include <stdio.h>
-#include <ctype.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 #include <stdlib.h>
 #include <string.h>
-#include <getopt.h>
+#include <unistd.h>
+#include <dirent.h>
+#include "list.h"
 
-#include "utils.h"
+void openFile(const char*);
 
-/* flags */
-
-static int recursive_flag;
-static int follow_flag;
-static int alpha_flag;
-static int sort_flag;
-
-static char *fileToExclude;
-static int numMin;
-static char *fileToIgnore;
-static char *logFile;
-char *outputFile = "sword.out";
-
-void sort();
-
-
-//static char **files;
-
-/*
- * argc num parametri
- * argv array di puntatori ai parametri (parti da argv[1])
- * 
- * */
-int main (int argc, char *argv[]) {
-	list *sword = createList();
-	char **files;
-	int c;
-	while (1){
-		  static struct option long_options[] =
-        {
-          /* These options set a flag. */
-          {"recursive", no_argument, &recursive_flag, 1},
-          {"follow", no_argument, &follow_flag, 1},
-          {"alpha", no_argument, &alpha_flag, 1},
-          {"sortbyoccurrence", no_argument, &sort_flag, 1},
-          /* These options donâ€™t set a flag.
-             We distinguish them by their indices. */
-          {"exclude",  required_argument, 0, 'e'},
-          {"min",  required_argument, 0, 'm'},
-          {"ignore",  required_argument, 0, 'i'},
-          {"log",  required_argument, 0, 'l'},
-          {"output",  required_argument, 0, 'o'},
-          {0, 0, 0, 0}
-        };
-        int option_index = 0;
-
-		c = getopt_long_only (argc, argv, "e:m:i:l:o:", long_options, &option_index);
+int main(void)
+{
+	char buf[2000];
+	char *res;
+	list* swordx = listCreate();
+	
+	/*FILE *f = openFile("D:/Michele/Documents/Università/2° Anno/Secondo Semestre/Sistemi Operativi/Sistemi Operativi Laboratorio/Esercizi/Progetto/test.txt");
+	
+	while(1) 
+	{
+		res = fgets(buf, 2000, f);
+		if( res==NULL )
+		  break;
 	  
-		/* Detect the end of the options. */
-		if (c == -1) break;
-        
-		switch (c)
-		{
-		  case 0:
-			  /* If this option set a flag, do nothing else now. */
-			  if (long_options[option_index].flag != 0) break;
-			  printf ("option %s", long_options[option_index].name);
-			  if (optarg)
-				printf (" with arg %s", optarg);
-			  printf ("\n");
-			  break;
-			
-		  case 'e':
-				fileToExclude = optarg;
-				break;
-		  case 'm':
-				numMin = *optarg;
-				break;
-		  case 'i':
-				fileToIgnore = optarg;
-				break;
-		  case 'l':
-				logFile = optarg;
-				break;
-		  case 'o':
-				outputFile = optarg;
-				break;
-		  case '?':
-			  /* getopt_long already printed an error message. */
-				break;
-		default:
-				abort ();
-			 }
-	}
+		storeString(swordx,buf);
+	}*/
+	const char* s = "D:/Michele/Documents/Università/2° Anno/Secondo Semestre/Sistemi Operativi/Sistemi Operativi Laboratorio/Esercizi/Progetto";
+	openFile(s);
+	//fclose(f);
 	
-/* Print any remaining command line arguments (not options). sono quindi i file di input */
-  if (optind < argc)
-    {
-	int size = (argc - optind);
-	files = calloc(size, sizeof(char**));
-	int z = 0;
-    printf ("input files: \n ");
-    while (optind < argc){
-		files[z] = argv[optind];
-		optind++;
-		printf ("%s ", files[z]);     
-		putchar ('\n');
-		z++;
+	//create the file swordnordered.out (it isn't ordered)
+	/*		
+	int file_created;
+	
+	file_created=creat("swordnordered.out", 0644);
+	if(file_created == 1) {printf("error");}
+	
+	//open the file sword.out 
+	
+	FILE *fp;
+	
+	fp = fopen("./swordnordered.out", "a");
+	
+	if (fp == NULL){
+		exit(-1);
 		}
-	
-	for (int j= 0; j < z; j++){
-		updateList(sword, files[j]);
-		}	
-	free(files);
-	
-	writeOnFile(sword, outputFile);
-	//sort();
-	
-    }
-  exit (0);
-}
-
-void sort(){
-	/*se quindi il sort Ã¨ in normale ordine alfabetico*/
-	char command[80];
-	strcpy(command, "/bin/sh -c sort -o ");
-	char inout[61];
-	if (sort_flag == 0){
-		/*sort file on bash -> sort -o input output*/
-		strcpy(inout, outputFile);
-		strcat(inout, " ");
-		strcat(inout, outputFile);
-		strcat(command, inout);
-		system(command);
-	}
-	/*se quindi il sort Ã¨ in base al numero di occorrenza*/
-	else {
-		}
-}
-				
 		
+	//write on the file all word and occurrence
 	
+	node *po = swordx -> first; //returns first node
 	
-	
-	
-	
+	while (i < countWord(swordx,buf))
+	{
+		fputs((po -> word), fp);
+		int number = (po -> occurrence);
+		fprintf(fp, " %d \n", number);
+		po = (po -> next);
+	}
 
+	{
+		fputs((po -> word), fp);
+		int number = (po -> occurrence);
+		fprintf(fp, " %d \n", number);
+		po = (po -> next);
+	} while (po -> next != NULL);
+		
+	fflush(fp);
+	fclose(fp);
+	
+	//write this on the shell
+	
+	system("/bin/sh -c sort  <./swordnordered.out > sword.out");
+	
+	if (remove("swordnordered.out") != 0) printf("Unable to delete the file");*/
+	
+}
+
+void openFile(const char *path)
+{
+	DIR* d = opendir(path);
+	struct dirent *pent;
+
+	if (!d)
+	{
+	  printf ("opendir() failure; terminating");
+	  exit(1);
+	}
+	 
+	while ((pent=readdir(d)))
+	{
+		printf("%s\n", pent->d_name);
+	}
+ 
+ 
+ closedir(d);
+	/* open the File */
+	/*FILE *fd = fopen(path, "r");
+	
+	if( fd==NULL ) 
+	{
+		perror("Errore in apertura del file");
+		exit(1);
+	}
+	else
+		return fd;*/
+}

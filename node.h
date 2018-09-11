@@ -4,4 +4,4 @@ typedef struct node{
 	struct node* next;
 }node;
 
-node *createNode(char*);
+node* createNode();
