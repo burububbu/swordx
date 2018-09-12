@@ -100,7 +100,7 @@ int main (int argc, char *argv[]) {
     while (optind < argc){
 		files[z] = argv[optind];
 		optind++;
-		printf ("%s ", files[z]);     
+		printf ("%s ", files[z]);   
 		putchar ('\n');
 		z++;
 		}
@@ -109,8 +109,8 @@ int main (int argc, char *argv[]) {
 		}
 	free(files);
 	writeOnFile(sword, outputFile);
-	//sort();
-    }
+	//sort(); */
+    } 
   else("There aren't input files");
   exit (0);
 }

@@ -24,16 +24,16 @@ void checkName(list* lst, char* filename){
 	 * fa l'updateList su ognuno di loro */
 	 
 	 // 0 false 1 true
-	if( isDirectory(filename)== 0){
+	if(isDirectory(filename)== 0){
 		updateList(lst, filename);
 	}
 	else{
-		fileInDirUpdate(lst, filename);
+		//problema here
+		fileInDirUpdate(lst, filename); 
 		}
 	}
 
 void updateList(list* lst, char* filename){
-	
 	FILE *fd;
 	char buf[40];
 	fd = fopen(filename, "r");
@@ -47,7 +47,7 @@ void updateList(list* lst, char* filename){
     while (fscanf(fd, " %40s", buf) == 1) {
         addWord(lst, buf);
     }
-}
+} 
 }
 
 void writeOnFile(list* lst, char* outputFile){
@@ -76,17 +76,17 @@ int isDirectory(char *path) {
 }
 
 int fileInDirUpdate(list* lst, char* filename){
-	printf("\n il file da escludere è %s \n", fileToExclude);
 	DIR *dp;
 	struct dirent *ep;
 	dp = opendir (filename);
+	printf("\ni'm hereeee\n");
 	if (dp != NULL)
-    {
+    { 
 		while (ep = readdir (dp)){
 			printf (ep -> d_name);
-			//printf ("\n");
+			printf ("\n");
 			/* concatenare path/file */
-			if (strcmp(ep -> d_name, fileToExclude) == 0){
+			if ((fileToExclude != NULL) && (strcmp(ep -> d_name, fileToExclude) == 0)){
 				 printf ("\n escludo il file %s dalla statistica\n", ep -> d_name);
 			}
 			else {
@@ -100,15 +100,14 @@ int fileInDirUpdate(list* lst, char* filename){
 					}
 				else{
 					 printf(" non è regolare\n"); 
-				}		
-		}
-			
-    }
+				}
+		} 
+	
+    } 
       (void) closedir (dp);
-    }
+   }
   else
     perror ("Couldn't open the directory");
-
   return 0;
 }
 

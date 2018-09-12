@@ -6,3 +6,4 @@ void writeOnFile(list*, char*);
 int isDirectory(char*);
 int fileInDirUpdate(list*, char*);
 int isRegular(char*);
+char* createPath (char*, char*);
