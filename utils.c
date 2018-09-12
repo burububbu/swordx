@@ -28,8 +28,7 @@ void checkName(list* lst, char* filename){
 		updateList(lst, filename);
 	}
 	else{
-		//problema here
-		fileInDirUpdate(lst, filename); 
+		fileInDirUpdate(lst, filename, 0); 
 		}
 	}
 
@@ -68,24 +67,16 @@ void writeOnFile(list* lst, char* outputFile){
 	fclose(fp);
 }
 
-int isDirectory(char *path) {
-   struct stat statbuf;
-   if (stat(path, &statbuf) != 0)
-       return 0;
-   return S_ISDIR(statbuf.st_mode);
-}
-
-int fileInDirUpdate(list* lst, char* filename){
+/*sub is 0 if the dir is a subdir, 1 otherwise
+ * 1 -> not recursion*/
+int fileInDirUpdate (list* lst, char* filename, int sub){
 	DIR *dp;
 	struct dirent *ep;
 	dp = opendir (filename);
-	printf("\ni'm hereeee\n");
 	if (dp != NULL)
     { 
 		while (ep = readdir (dp)){
-			printf (ep -> d_name);
-			printf ("\n");
-			/* concatenare path/file */
+			/* EXCLUDE FILE */
 			if ((fileToExclude != NULL) && (strcmp(ep -> d_name, fileToExclude) == 0)){
 				 printf ("\n escludo il file %s dalla statistica\n", ep -> d_name);
 			}
@@ -95,20 +86,49 @@ int fileInDirUpdate(list* lst, char* filename){
 				strcpy(name, filename);
 				strcat(name, ep -> d_name );
 				if (isRegular(name) == 1){
-					printf(" è regolare\n quindi \n");
+					printf("%s è regolare\n", name);
 					updateList(lst, name);
 					}
-				else{
-					 printf(" non è regolare\n"); 
+				else {
+					 printf("/n%s non è regolare\n", name); 
+					 if (name[strlen(name)-1] != '.'){  /*ultimo char è .*/
+					 if (sub == 0){
+						 /*RECURSIVE*/
+						if(recursive_flag == 1){
+							if (!isLink(name))
+							{
+							char newname[sizePath + 1];
+							strcpy(newname,name);
+							strcat(newname, "/");
+							if (isDirectory(newname)) fileInDirUpdate(lst, newname, 1);
+							}
+						}
+						 /*FOLLOW*/
+						else if ((follow_flag == 1) && isLink(name)){
+							char newname[sizePath + 1];
+							strcpy(newname,name);
+							strcat(newname, "/");
+							fileInDirUpdate(lst, newname, 1);
+							} 
+						 } 
+					}
 				}
 		} 
-	
-    } 
-      (void) closedir (dp);
-   }
-  else
+	}
+  (void) closedir (dp);
+  }
+  else {
     perror ("Couldn't open the directory");
+   }
   return 0;
+}
+
+
+int isDirectory(char *path) {
+   struct stat statbuf;
+   if (stat(path, &statbuf) != 0)
+       return 0;
+   return S_ISDIR(statbuf.st_mode);
 }
 
 int isRegular(char* path){
@@ -117,5 +137,9 @@ int isRegular(char* path){
     return S_ISREG(path_stat.st_mode);
 	}
 
-
+int isLink(char* path){
+	 struct stat path_stat;
+	 lstat(path, &path_stat);
+	 return S_ISLNK(path_stat.st_mode);
+	}
 
