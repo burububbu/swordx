@@ -9,3 +9,5 @@ list* createList();
 void addWord(list*, char*);
 node* find(list*, char*);
 void updateOccurrence(node*);
+void storeString(list*, char []);
+int countWord(char []);
