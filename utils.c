@@ -44,7 +44,7 @@ void updateList(list* lst, char* filename){
 	else {
     /* assumes no word exceeds length of 40 */
     while (fscanf(fd, " %40s", buf) == 1) {
-        addWord(lst, buf);
+        storeString(lst, buf);
     }
 } 
 }
