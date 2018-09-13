@@ -109,7 +109,7 @@ int main (int argc, char *argv[]) {
 		}
 	free(files);
 	writeOnFile(sword, outputFile);
-	//sort(); */
+//	sort(); 
     } 
   else("There aren't input files");
   exit (0);
@@ -118,6 +118,7 @@ int main (int argc, char *argv[]) {
 void sort(){
 	/*se quindi il sort è in normale ordine alfabetico*/
 	char command[80];
+	printf("arriva qui");
 	strcpy(command, "/bin/sh -c sort -o ");
 	char inout[61];
 	if (sort_flag == 0){
@@ -129,8 +130,7 @@ void sort(){
 		system(command);
 	}
 	/*se quindi il sort è in base al numero di occorrenza*/
-	else {
-		}
+	else {}
 }
 				
 		
