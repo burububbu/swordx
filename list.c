@@ -4,60 +4,73 @@
 #include <ctype.h>//contiene isalpha() e isdigit() che permettono di controllare se una stringa contiene caratteri alfanumerici
 #include "list.h"
 
-list* createList()
+//function implementation
+int size(list* l)
 {
-	list* list = malloc(sizeof(list));
-	list -> first = NULL;
-	list -> last = NULL;
-	
-	return list;
+	node* n = l -> first;
+    int size = 1;
+    while (n -> next != NULL) 
+    {
+    	size++;
+        n = n -> next;
+    }
+    return size;
 }
 
-void addWord(list* l, char* c)
+list* createList()
 {
-	node* app = find(l,c);
+	list* l = malloc(sizeof(list));
 	
-	if(app == NULL)
-	{
-		node* n = createNode(c);
-		
-		if((l -> first) == NULL)
+	node* n = createNode();
+	l -> first = n;
+	
+	if(size(l) == 1)
+		l -> last = n;
+
+	return l;
+}
+
+node* find(list* list, char* str)
+{
+	node* n = list -> first;
+    while (n -> next != NULL) 
+    {
+        int cmp = strcmp(str, n -> word);
+            
+		if (cmp == 0) 
 		{
-			l -> first = n;
-			l -> last = n;
+			return n;
 		}
-		else
-		{
-			l -> last = n;
-		}
-		
-		printf("\nFirst: %s\n",l -> first -> word);
-		printf("\nLast: %s\n",l -> last -> word);
+        
+        n = n -> next;
+    }
+    return NULL;
+}
+
+void addWord(list* list, char *str)
+{
+	node *n = list -> first;
+	node* app = find(list, str);
+	
+    if(app == NULL)
+    {
+    	while (n -> next != NULL) 
+    	{
+    		n  = n -> next;
+        }
+		n -> word = str;
+		n -> occurrence += 1;
+		n -> next = createNode();
+		list -> last = n;
 	}
 	else
 	{
 		updateOccurrence(app);
+		list -> last = app;
 	}
-}
 
-node* find(list* l, char* str)
-{
-	node* n = l -> first;
-	
-	if(n == NULL)
-		return NULL;
-	
-	while(n -> next != NULL)
-	{
-		int cmp = strcmp(str,n -> word);
-		
-		if(cmp == 0)
-			return n;
-		
-		n = n -> next;
-	}
-	
-	return NULL;
+	printf("First: %s\n",list -> first -> word);
+	printf("Last: %s\n",list -> last -> word);
 }
 
 void updateOccurrence(node* n)
@@ -65,33 +78,28 @@ void updateOccurrence(node* n)
 	n -> occurrence += 1;
 }
 
-void storeString(list* l, char buf[])
+void storeString(list* l, char s[])
 {
+	char* str= calloc(countWord(s),20);
 	int i = 0;
-	int j = 0;
 	
-	while(i < countWord(buf))
+	while(s[i] != '\0')
 	{
-		int k = 0;
-		char* str= calloc(countWord(buf),20);
-		
-		while(buf[j] != ' ')
+		if(isalpha(s[i]) || isdigit(s[i]))
+			str[i] = s[i];
+		else
 		{
-			if(isalpha(buf[j]) || isdigit(str[j]))
-					str[k] = buf[j];
-				
-			j++;
-			k++;
+			str = NULL;
+			break;
 		}
-		
-		j += 1;
-		
-		if(strlen(buf) >= 1 && buf[1] != '\0')
-		{
-			printf("*%s*\n",str);
-			addWord(l,str);
-		}
+			
 		i++;
+	}
+	
+	if(str != NULL)
+	{
+		printf("*%s*\n",str);
+		addWord(l,str);
 	}
 }
 
