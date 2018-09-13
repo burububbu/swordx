@@ -57,8 +57,8 @@ void writeOnFile(list* lst, char* outputFile){
 		}
 	/* write on the file all word and occurrence*/
 	node *po = lst-> first;
-	while (po!= NULL) {
-		fputs((po -> word), fp);
+	while (po != NULL) {
+		fprintf(fp, "%s ", po -> word);
 		int number = (po -> occurrence);
 		fprintf(fp, " %d \n", number);
 		po = (po -> next);
