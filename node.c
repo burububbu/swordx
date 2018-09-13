@@ -5,12 +5,12 @@
 
 //create node
 
-node* createNode(char* w)
+node* createNode()
 {
-	node* n = malloc (sizeof(node));
+	node* n = malloc(sizeof(node));
 	
-	n -> word = w;
-	n -> occurrence = 1;
+	n -> word = NULL;
+	n -> occurrence = 0;
 	n -> next = NULL;
 	
 	return n;
