@@ -5,7 +5,10 @@ typedef struct list{
 	struct node* last;
 }list;
 
+int size(list*);
 list* createList();
-void addWord(list*, char*);
 node* find(list*, char*);
+void addWord(list*, char*);
 void updateOccurrence(node*);
+void storeString(list*, char[]);
+int countWord(char []);
