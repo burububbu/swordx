@@ -20,10 +20,8 @@ char *logFile;
 /* controlla che il nome sia un file o una directory, nel caso in cui fosse una directory */
 void checkName(list* lst, char* filename){
 	/* se NON è una directory fa l'update della lista passa a updateList il file, se no
-	 *  apre la directory, mette tutti i file nella directory in un'array di file
-	 * fa l'updateList su ognuno di loro */
-	 
-	 // 0 false 1 true
+	 *  apre la directory, controlla i file e fa l'updateList su ognuno di loro */
+
 	if(isDirectory(filename)== 0){
 		updateList(lst, filename);
 	}
@@ -54,6 +52,7 @@ void writeOnFile(list* lst, char* outputFile){
 	/* from appen mode to write mode*/
 	fp = fopen(outputFile ,"w");
 	if (fp == NULL){
+		printf("Error in output file");
 		exit(-1);
 		}
 	/* write on the file all word and occurrence*/
