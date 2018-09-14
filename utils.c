@@ -45,13 +45,14 @@ void updateList(list* lst, char* filename){
     /* assumes no word exceeds length of 40 */
     while (fscanf(fd, " %40s", buf) == 1) {
     	storeString(lst, buf);
-    }
-} 
+	}
+	} 
 }
 
 void writeOnFile(list* lst, char* outputFile){
 	FILE *fp;
-	fp = fopen(outputFile ,"a");
+	/* from appen mode to write mode*/
+	fp = fopen(outputFile ,"w");
 	if (fp == NULL){
 		exit(-1);
 		}
@@ -102,9 +103,9 @@ int fileInDirUpdate (list* lst, char* filename, int sub){
 							strcat(newname, "/");
 							if (isDirectory(newname)) fileInDirUpdate(lst, newname, 1);
 							}
-						}
+						};
 						 /*FOLLOW*/
-						else if ((follow_flag == 1) && isLink(name)){
+						if ((follow_flag == 1) && isLink(name)){
 							char newname[sizePath + 1];
 							strcpy(newname,name);
 							strcat(newname, "/");
