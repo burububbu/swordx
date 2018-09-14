@@ -116,19 +116,15 @@ int main (int argc, char *argv[]) {
 }
 void sort(){
 	if (sort_flag == 0){
-		//system("sort -o sword.out sword.out");
-		printf("il flag è 0");
-		printf("\n%s", outputFile);
 		int size = strlen(" sort -o ")+ (strlen(outputFile)*2) + 1;
 		char inout[size];
 		strcpy(inout, "sort -o ");
 		strcat(inout, outputFile);
 		strcat(inout, " ");
 		strcat(inout, outputFile);
-		printf("%s", inout);
 		system(inout);
 		}
-	/*se quindi il sort è in base al numero di occorrenza*/
+	/*SORT BY OCCURRENCE*/
 	 else {}
 	}
 
