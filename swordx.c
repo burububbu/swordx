@@ -126,6 +126,7 @@ int main (int argc, char *argv[]) {
   else("There aren't input files");
   exit (0);
 }
+
 void sort(){
 	if (sort_flag == 0){
 		int size = strlen(" sort -o ")+ (strlen(outputFile)*2) + 1;
