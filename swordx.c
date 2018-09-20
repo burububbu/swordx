@@ -3,26 +3,57 @@
 #include <stdlib.h>
 #include <string.h>
 #include <getopt.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+#include <dirent.h>
+#include <time.h>
+#include "list.h"
 
-#include "utils.h"
-#include "global.h"
 
 /* flags */
-
-int recursive_flag;
-int follow_flag;
-int alpha_flag;
+static int recursive_flag;
+static int follow_flag;
+static int alpha_flag;
 
 static int sort_flag;
 
-char *fileToExclude;
-int numMin;
-char *fileToIgnore;
-char *logFile;
+static char *fileToExclude;
+static int numMin;
+static char *fileToIgnore;
+static char *logFile;
 
 char *outputFile = "sword.out";
 
+
+/*struttura "creata" in CheckName() e fileInDirUpdate()*/
+typedef struct parLog{
+	char* name;
+	int cw;
+	int iw;
+	double time;
+	struct parLog *next;
+}parLog;
+
 void sort();
+void checkName(char*);
+void updateList(char*);
+void writeOnFile();
+void writeLogFile();
+
+
+int isDirectory(char*);
+int isRegular(char*);
+int isLink(char*);
+int fileInDirUpdate(char*, int); /*lista, file name, boolean is is a  sub or not*/
+char* createPath (char*, char*);
+parLog* createLogNode(char*);
+
+
+/*deve cambiare in firstNode*/
+list* sword;
+
+parLog* firstLogNode;
 
 /*
  * argc num parametri
@@ -30,7 +61,7 @@ void sort();
  * 
  * */
 int main (int argc, char *argv[]) {
-	list *sword = createList();
+	sword = createList();
 	char **files;
 	int c;
 	while (1){
@@ -43,7 +74,7 @@ int main (int argc, char *argv[]) {
           {"sortbyoccurrence", no_argument, &sort_flag, 1},
           /* These options don’t set a flag.
              We distinguish them by their indices. */
-          {"exclude",  required_argument, 0, 'e'},
+          {"explude",  required_argument, 0, 'e'},
           {"min",  required_argument, 0, 'm'},
           {"ignore",  required_argument, 0, 'i'},
           {"log",  required_argument, 0, 'l'},
@@ -100,43 +131,223 @@ int main (int argc, char *argv[]) {
     while (optind < argc){
 		files[z] = argv[optind];
 		optind++;
-		printf ("%s ", files[z]);   
-		putchar ('\n');
+		printf ("%s \n", files[z]);
 		z++;
 		}
 	for (int j= 0; j < z; j++){
-		checkName(sword, files[j]);
+		checkName(files[j]);
 		}
 	free(files);
-	writeOnFile(sword, outputFile);
-	//sort(); */
+	writeOnFile(outputFile);
+	sort(); 
+	if (logFile != NULL) writeLogFile();
     } 
   else("There aren't input files");
   exit (0);
 }
 
 void sort(){
-	/*se quindi il sort è in normale ordine alfabetico*/
-	char command[80];
-	strcpy(command, "/bin/sh -c sort -o ");
-	char inout[61];
 	if (sort_flag == 0){
-		/*sort file on bash -> sort -o input output*/
-		strcpy(inout, outputFile);
+		int size = strlen(" sort -o ")+ (strlen(outputFile)*2) + 1;
+		char inout[size];
+		strcpy(inout, "sort -o ");
+		strcat(inout, outputFile);
 		strcat(inout, " ");
 		strcat(inout, outputFile);
-		strcat(command, inout);
-		system(command);
-	}
-	/*se quindi il sort è in base al numero di occorrenza*/
-	else {
+		system(inout);
 		}
-}
-				
-		
-	
-	
-	
-	
-	
+	/*SORT BY OCCURRENCE*/
+	 else {}
+	}
 
+
+/* controlla che il nome sia un file o una directory, nel caso in cui fosse una directory */
+void checkName(char* filename){
+	/* se NON è una directory fa l'update della lista passa a updateList il file, se no
+	 *  apre la directory, controlla i file e fa l'updateList su ognuno di loro */
+
+	if(isDirectory(filename)== 0){
+	
+		if (logFile == NULL){
+			updateList(filename);
+		}
+		/* LOG FILE __exec time*/
+		else {
+			parLog* n =createLogNode(filename);
+			clock_t t;
+			t = clock();
+			updateList(filename);
+			t = clock() - t;
+			double time_taken = ((double)t)/ CLOCKS_PER_SEC;
+			n -> time = time_taken;
+			printf("\nLa funzione ci ha messo %f secondi \n", n -> time);
+			}
+	}
+	else{
+		fileInDirUpdate(filename, 0); 
+		}
+	}
+
+
+void updateList(char* filename){
+	FILE *fd;
+	char buf[40];
+	fd = fopen(filename, "r");
+	
+	if( fd==NULL ){
+		perror("Errore in apertura del file");
+		exit(1);
+	}
+	else {
+    /* assumes no word exceeds length of 40 */
+    while (fscanf(fd, " %40s", buf) == 1) {
+    	storeString(sword,buf);
+	}
+	} 
+}
+
+void writeOnFile(){
+	FILE *fp;
+	/* from append mode to write mode*/
+	fp = fopen(outputFile ,"w");
+	if (fp == NULL){
+		printf("Error in output file");
+		exit(-1);
+		}
+	/* write on the file all word and occurrence*/
+	node *po = sword -> first;
+	while (po-> next != NULL) {
+		fprintf(fp, "%s ", po -> word);
+		int number = (po -> occurrence);
+		fprintf(fp, " %d \n", number);
+		po = (po -> next);
+	};
+	fflush(fp);
+	fclose(fp);
+}
+
+
+void writeLogFile(){
+	FILE *fp;
+	fp = fopen(logFile ,"w");
+	if (fp == NULL){
+		printf("Error in log file");
+		exit(-1);
+		}
+	parLog *app = firstLogNode;
+	while (app-> next != NULL) {
+		fprintf(fp, "%s ", app -> name);
+		fprintf(fp, "%d ", app -> cw);
+		fprintf(fp, "%d ", app -> iw);
+		fprintf(fp, "%f ", app -> time);
+		/*int number = (po -> occurrence);
+		fprintf(fp, " %d \n", number); */
+		app = (app -> next);
+	};
+	fflush(fp);
+	fclose(fp);
+	
+	
+	};
+
+/*sub is 0 if the dir is a subdir, 1 otherwise
+ * 1 -> not recursion*/
+int fileInDirUpdate (char* filename, int sub){
+	DIR *dp;
+	struct dirent *ep;
+	dp = opendir (filename);
+	if (dp != NULL)
+    { 
+		while (ep = readdir (dp)){
+			/* EXCLUDE FILE */
+			if ((fileToExclude != NULL) && (strcmp(ep -> d_name, fileToExclude) == 0)){
+				 printf ("\n escludo il file %s dalla statistica\n", ep -> d_name);
+			}
+			else {
+				int sizePath =  strlen(filename) + strlen(ep -> d_name);
+				char name[sizePath];
+				strcpy(name, filename);
+				strcat(name, ep -> d_name );
+				if (isRegular(name) == 1){
+					printf("%s è regolare\n", name);
+					if (logFile != NULL){
+						clock_t t;
+						t = clock();
+						updateList(filename);
+						t = clock() - t;
+						double time_taken = ((double)t)/ CLOCKS_PER_SEC;
+						printf("\nLa funzione ci ha messo %f secondi \n", time_taken);
+					}
+					else {
+					updateList(name);
+					}
+					}
+				else {
+					 printf("/n%s non è regolare\n", name); 
+					 if (name[strlen(name)-1] != '.'){  /*ultimo char è .*/
+					 if (sub == 0){
+						 /*RECURSIVE*/
+						if(recursive_flag == 1){
+							if (!isLink(name))
+							{
+							char newname[sizePath + 1];
+							strcpy(newname,name);
+							strcat(newname, "/");
+							if (isDirectory(newname)) fileInDirUpdate(newname, 1);
+							}
+						};
+						 /*FOLLOW*/
+						if ((follow_flag == 1) && isLink(name)){
+							char newname[sizePath + 1];
+							strcpy(newname,name);
+							strcat(newname, "/");
+							fileInDirUpdate(newname, 1);
+							} 
+						 } 
+					}
+				}
+		} 
+	}
+  (void) closedir (dp);
+  }
+  else {
+    perror ("Couldn't open the directory");
+   }
+  return 0;
+}
+
+parLog* createLogNode(char* filename){
+	parLog *n = malloc(sizeof(parLog));
+	n -> name = filename;
+	n -> cw = 0;
+	n -> iw = 0;
+	n -> next = NULL;
+	if (firstLogNode == NULL){
+		firstLogNode = n;
+		}
+	else {
+		parLog* app = firstLogNode;
+		while (firstLogNode -> next != NULL) app = app -> next;		
+		app -> next = n;
+		}
+	return n;
+	};
+
+int isDirectory(char *path) {
+   struct stat statbuf;
+   if (stat(path, &statbuf) != 0)
+       return 0;
+   return S_ISDIR(statbuf.st_mode);
+}
+
+int isRegular(char* path){
+	struct stat path_stat;
+    stat(path, &path_stat);
+    return S_ISREG(path_stat.st_mode);
+	}
+
+int isLink(char* path){
+	 struct stat path_stat;
+	 lstat(path, &path_stat);
+	 return S_ISLNK(path_stat.st_mode);
+	}
