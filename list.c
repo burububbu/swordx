@@ -30,6 +30,7 @@ list* createList()
 	return l;
 }
 
+
 node* find(list* list, char* str)
 {
 	node* n = list -> first;
