@@ -40,6 +40,7 @@ void updateList(char*);
 void UpdateListwLog(char*);
 void writeOnFile();
 void writeLogFile();
+void printNames();
 
 
 int isDirectory(char*);
@@ -47,13 +48,13 @@ int isRegular(char*);
 int isLink(char*);
 int fileInDirUpdate(char*, int); /*lista, file name, boolean is is a  sub or not*/
 char* createPath (char*, char*);
-parLog* createLogNode(char*);
+parLog* createLogNode();
 
 
 /*deve cambiare in firstNode*/
 list* sword;
 
-parLog* firstLogNode;
+static parLog* firstLogNode;
 
 /*
  * argc num parametri
@@ -140,7 +141,9 @@ int main (int argc, char *argv[]) {
 	free(files);
 	writeOnFile(outputFile);
 	sort(); 
-	if (logFile != NULL) writeLogFile();
+	if (logFile != NULL) {
+		printNames(); writeLogFile();
+    }
     } 
   else("There aren't input files");
   exit (0);
@@ -173,7 +176,15 @@ void checkName(char* filename){
 		}
 		/* LOG FILE __exec time*/
 		else {
-			UpdateListwLog(filename);
+			//UpdateListwLog(filename);
+			parLog* n =createLogNode();
+			n -> name = filename;
+			clock_t t;
+			t = clock();
+			updateList(filename);
+			t = clock() - t;
+			double time_taken = ((double)t)/ CLOCKS_PER_SEC;
+			n -> time = time_taken;
 			}
 	}
 	else{
@@ -241,10 +252,10 @@ void writeLogFile(){
 
 /*sub is 0 if the dir is a subdir, 1 otherwise
  * 1 -> not recursion*/
-int fileInDirUpdate (char* filename, int sub){
+int fileInDirUpdate (char* path, int sub){
 	DIR *dp;
 	struct dirent *ep;
-	dp = opendir (filename);
+	dp = opendir (path);
 	if (dp != NULL)
     { 
 		while (ep = readdir (dp)){
@@ -253,37 +264,50 @@ int fileInDirUpdate (char* filename, int sub){
 				 printf ("\n escludo il file %s dalla statistica\n", ep -> d_name);
 			}
 			else {
-				int sizePath =  strlen(filename) + strlen(ep -> d_name);
-				char name[sizePath];
-				strcpy(name, filename);
-				strcat(name, ep -> d_name );
-				if (isRegular(name) == 1){
-					printf("%s è regolare\n", name);
+				int sizePath =  strlen(path) + strlen(ep -> d_name);
+				
+				char filename[sizePath];
+				
+				strcpy(filename, path);
+				strcat(filename, ep -> d_name );
+				if (isRegular(filename) == 1){
+					printf("%s è regolare\n", filename);
 					if (logFile != NULL){
-						UpdateListwLog(name);
+						//UpdateListwLog(name);
+						/*NON MI FA USARE NAME*/
+						
+						clock_t t;
+						t = clock();
+						updateList(filename);
+						t = clock() - t;
+						double time_taken = ((double)t)/ CLOCKS_PER_SEC;
+						parLog* n =createLogNode();
+						n -> name = path;
+						n -> time = time_taken;
+						//printf("\nAAAAAAAAAAAAAAAAAAAAA %s", n -> name);
 					}
 					else {
-						updateList(name);
+						updateList(filename);
 						}
 					}
 				else {
-					 printf("/n%s non è regolare\n", name); 
-					 if (name[strlen(name)-1] != '.'){  /*ultimo char è .*/
+					 printf("/n%s non è regolare\n", filename); 
+					 if (filename[strlen(filename)-1] != '.'){  /*ultimo char è .*/
 					 if (sub == 0){
 						 /*RECURSIVE*/
 						if(recursive_flag == 1){
-							if (!isLink(name))
+							if (!isLink(filename))
 							{
 							char newname[sizePath + 1];
-							strcpy(newname,name);
+							strcpy(newname,filename);
 							strcat(newname, "/");
 							if (isDirectory(newname)) fileInDirUpdate(newname, 1);
 							}
 						};
 						 /*FOLLOW*/
-						if ((follow_flag == 1) && isLink(name)){
+						if ((follow_flag == 1) && isLink(filename)){
 							char newname[sizePath + 1];
-							strcpy(newname,name);
+							strcpy(newname,filename);
 							strcat(newname, "/");
 							fileInDirUpdate(newname, 1);
 							} 
@@ -300,27 +324,33 @@ int fileInDirUpdate (char* filename, int sub){
   return 0;
 }
 
-parLog* createLogNode(char* filename){
+parLog* createLogNode(){
 	parLog *n = malloc(sizeof(parLog));
-	n -> name = filename;
+	
+	n -> name = "";
 	n -> cw = 0;
 	n -> iw = 0;
 	n -> next = NULL;
+	
 	if (firstLogNode == NULL){
 		firstLogNode = n;
 		}
 	else {
 		parLog* app = firstLogNode;	
+		while (app -> next  != NULL){	
+			app = app-> next;
+		}
 		app -> next = n;
 		}
 	return n;
 	};
 
-void UpdateListwLog(char* filename){
-	parLog* n =createLogNode(filename);
+void UpdateListwLog(char* name){
+	parLog* n =createLogNode();
+	n -> name = name;
 	clock_t t;
 	t = clock();
-	updateList(filename);
+	updateList(name);
 	t = clock() - t;
 	double time_taken = ((double)t)/ CLOCKS_PER_SEC;
 	n -> time = time_taken;
@@ -343,4 +373,14 @@ int isLink(char* path){
 	 struct stat path_stat;
 	 lstat(path, &path_stat);
 	 return S_ISLNK(path_stat.st_mode);
+	}
+
+void printNames(){
+	printf("i nomi dei files nei nodi sono:");
+	parLog* app = firstLogNode;
+	while (app != NULL){
+		printf("\n aaa %s", app -> name);
+		app = app-> next;
+		}
+	
 	}

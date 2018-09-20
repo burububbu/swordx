@@ -70,8 +70,8 @@ void addWord(list* list, char *str)
 		list -> last = app;
 	}
 
-	printf("First: %s\n",list -> first -> word);
-	printf("Last: %s\n",list -> last -> word);
+	// printf("First: %s\n",list -> first -> word);
+	// printf("Last: %s\n",list -> last -> word);
 }
 
 void updateOccurrence(node* n)
@@ -99,7 +99,7 @@ void storeString(list* l, char s[])
 	
 	if(str != NULL)
 	{
-		printf("*%s*\n",str);
+	//	printf("*%s*\n",str);
 		addWord(l,str);
 	}
 }
