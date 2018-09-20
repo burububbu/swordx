@@ -25,8 +25,7 @@ static char *logFile;
 
 char *outputFile = "sword.out";
 
-
-/*struttura "creata" in CheckName() e fileInDirUpdate()*/
+/*struttura utilizzata in CheckName() e fileInDirUpdate()*/
 typedef struct parLog{
 	char* name;
 	int cw;
@@ -38,6 +37,7 @@ typedef struct parLog{
 void sort();
 void checkName(char*);
 void updateList(char*);
+void UpdateListwLog(char*);
 void writeOnFile();
 void writeLogFile();
 
@@ -173,14 +173,7 @@ void checkName(char* filename){
 		}
 		/* LOG FILE __exec time*/
 		else {
-			parLog* n =createLogNode(filename);
-			clock_t t;
-			t = clock();
-			updateList(filename);
-			t = clock() - t;
-			double time_taken = ((double)t)/ CLOCKS_PER_SEC;
-			n -> time = time_taken;
-			printf("\nLa funzione ci ha messo %f secondi \n", n -> time);
+			UpdateListwLog(filename);
 			}
 	}
 	else{
@@ -235,19 +228,15 @@ void writeLogFile(){
 		exit(-1);
 		}
 	parLog *app = firstLogNode;
-	while (app-> next != NULL) {
+	do{
 		fprintf(fp, "%s ", app -> name);
-		fprintf(fp, "%d ", app -> cw);
-		fprintf(fp, "%d ", app -> iw);
-		fprintf(fp, "%f ", app -> time);
-		/*int number = (po -> occurrence);
-		fprintf(fp, " %d \n", number); */
-		app = (app -> next);
-	};
+		fprintf(fp, "  %d ", app -> cw);
+		fprintf(fp, "  %d ", app -> iw);
+		fprintf(fp, "  %f\n", app -> time);
+		app = app -> next;
+	} while(app != NULL);
 	fflush(fp);
 	fclose(fp);
-	
-	
 	};
 
 /*sub is 0 if the dir is a subdir, 1 otherwise
@@ -271,16 +260,11 @@ int fileInDirUpdate (char* filename, int sub){
 				if (isRegular(name) == 1){
 					printf("%s è regolare\n", name);
 					if (logFile != NULL){
-						clock_t t;
-						t = clock();
-						updateList(filename);
-						t = clock() - t;
-						double time_taken = ((double)t)/ CLOCKS_PER_SEC;
-						printf("\nLa funzione ci ha messo %f secondi \n", time_taken);
+						UpdateListwLog(name);
 					}
 					else {
-					updateList(name);
-					}
+						updateList(name);
+						}
 					}
 				else {
 					 printf("/n%s non è regolare\n", name); 
@@ -326,12 +310,21 @@ parLog* createLogNode(char* filename){
 		firstLogNode = n;
 		}
 	else {
-		parLog* app = firstLogNode;
-		while (firstLogNode -> next != NULL) app = app -> next;		
+		parLog* app = firstLogNode;	
 		app -> next = n;
 		}
 	return n;
 	};
+
+void UpdateListwLog(char* filename){
+	parLog* n =createLogNode(filename);
+	clock_t t;
+	t = clock();
+	updateList(filename);
+	t = clock() - t;
+	double time_taken = ((double)t)/ CLOCKS_PER_SEC;
+	n -> time = time_taken;
+};
 
 int isDirectory(char *path) {
    struct stat statbuf;
