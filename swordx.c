@@ -8,7 +8,7 @@
 #include <unistd.h>
 #include <dirent.h>
 #include <time.h>
-#include "list.h"
+#include "node.h"
 
 
 /* flags */
@@ -52,7 +52,7 @@ parLog* createLogNode(char*);
 
 
 /*deve cambiare in firstNode*/
-list* sword;
+static node* firstNode;
 
 static parLog* firstLogNode;
 
@@ -62,7 +62,6 @@ static parLog* firstLogNode;
  * 
  * */
 int main (int argc, char *argv[]) {
-	sword = createList();
 	char **files;
 	int c;
 	while (1){
@@ -197,7 +196,13 @@ void updateList(char* filename){
 	else {
     /* assumes no word exceeds length of 40 */
     while (fscanf(fd, " %40s", buf) == 1) {
-    	storeString(sword,buf);
+		if (firstNode == NULL){
+			firstNode = storeString(firstNode,buf);
+			printf("\nLa parola del primo nodo è %s \n", firstNode -> word);
+			}
+    	else {
+			storeString(firstNode,buf);
+		}
 	}
 	} 
 }
@@ -211,8 +216,8 @@ void writeOnFile(){
 		exit(-1);
 		}
 	/* write on the file all word and occurrence*/
-	node *po = sword -> first;
-	while (po-> next != NULL) {
+	node *po = firstNode;
+	while (po != NULL) {
 		fprintf(fp, "%s ", po -> word);
 		int number = (po -> occurrence);
 		fprintf(fp, " %d \n", number);
