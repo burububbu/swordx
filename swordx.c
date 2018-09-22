@@ -8,7 +8,7 @@
 #include <unistd.h>
 #include <dirent.h>
 #include <time.h>
-#include "list.h"
+#include "node.h"
 
 
 /* flags */
@@ -26,7 +26,7 @@ static char *logFile;
 char *outputFile = "sword.out";
 
 
-/*struttura "creata" in CheckName() e fileInDirUpdate()*/
+/*struttura utilizzata in CheckName() e fileInDirUpdate()*/
 typedef struct parLog{
 	char* name;
 	int cw;
@@ -38,6 +38,7 @@ typedef struct parLog{
 void sort();
 void checkName(char*);
 void updateList(char*);
+void UpdateListwLog(char*);
 void writeOnFile();
 void writeLogFile();
 
@@ -51,9 +52,9 @@ parLog* createLogNode(char*);
 
 
 /*deve cambiare in firstNode*/
-list* sword;
+static node* firstNode;
 
-parLog* firstLogNode;
+static parLog* firstLogNode;
 
 /*
  * argc num parametri
@@ -61,7 +62,6 @@ parLog* firstLogNode;
  * 
  * */
 int main (int argc, char *argv[]) {
-	sword = createList();
 	char **files;
 	int c;
 	while (1){
@@ -140,7 +140,9 @@ int main (int argc, char *argv[]) {
 	free(files);
 	writeOnFile(outputFile);
 	sort(); 
-	if (logFile != NULL) writeLogFile();
+	if (logFile != NULL) { 
+		writeLogFile();
+    }
     } 
   else("There aren't input files");
   exit (0);
@@ -148,7 +150,7 @@ int main (int argc, char *argv[]) {
 
 void sort(){
 	if (sort_flag == 0){
-		int size = strlen(" sort -o ")+ (strlen(outputFile)*2) + 1;
+		int size = ((strlen(outputFile)*2) + 10); /* 10 -> 1 + 9 (length di " sort -o " )*/
 		char inout[size];
 		strcpy(inout, "sort -o ");
 		strcat(inout, outputFile);
@@ -173,14 +175,7 @@ void checkName(char* filename){
 		}
 		/* LOG FILE __exec time*/
 		else {
-			parLog* n =createLogNode(filename);
-			clock_t t;
-			t = clock();
-			updateList(filename);
-			t = clock() - t;
-			double time_taken = ((double)t)/ CLOCKS_PER_SEC;
-			n -> time = time_taken;
-			printf("\nLa funzione ci ha messo %f secondi \n", n -> time);
+			UpdateListwLog(filename);
 			}
 	}
 	else{
@@ -201,7 +196,13 @@ void updateList(char* filename){
 	else {
     /* assumes no word exceeds length of 40 */
     while (fscanf(fd, " %40s", buf) == 1) {
-    	storeString(sword,buf);
+		if (firstNode == NULL){
+			firstNode = storeString(firstNode,buf);
+			printf("\nLa parola del primo nodo è %s \n", firstNode -> word);
+			}
+    	else {
+			storeString(firstNode,buf);
+		}
 	}
 	} 
 }
@@ -215,8 +216,8 @@ void writeOnFile(){
 		exit(-1);
 		}
 	/* write on the file all word and occurrence*/
-	node *po = sword -> first;
-	while (po-> next != NULL) {
+	node *po = firstNode;
+	while (po != NULL) {
 		fprintf(fp, "%s ", po -> word);
 		int number = (po -> occurrence);
 		fprintf(fp, " %d \n", number);
@@ -235,27 +236,24 @@ void writeLogFile(){
 		exit(-1);
 		}
 	parLog *app = firstLogNode;
-	while (app-> next != NULL) {
+	do{
 		fprintf(fp, "%s ", app -> name);
-		fprintf(fp, "%d ", app -> cw);
-		fprintf(fp, "%d ", app -> iw);
-		fprintf(fp, "%f ", app -> time);
-		/*int number = (po -> occurrence);
-		fprintf(fp, " %d \n", number); */
-		app = (app -> next);
-	};
+		fprintf(fp, "  %d ", app -> cw);
+		fprintf(fp, "  %d ", app -> iw);
+		fprintf(fp, "  %f\n", app -> time);
+		app = app -> next;
+	} while(app != NULL);
 	fflush(fp);
 	fclose(fp);
-	
-	
+	printf("\nFile di log %s creato!\n", logFile);
 	};
 
 /*sub is 0 if the dir is a subdir, 1 otherwise
  * 1 -> not recursion*/
-int fileInDirUpdate (char* filename, int sub){
+int fileInDirUpdate (char* path, int sub){
 	DIR *dp;
 	struct dirent *ep;
-	dp = opendir (filename);
+	dp = opendir (path);
 	if (dp != NULL)
     { 
 		while (ep = readdir (dp)){
@@ -264,42 +262,40 @@ int fileInDirUpdate (char* filename, int sub){
 				 printf ("\n escludo il file %s dalla statistica\n", ep -> d_name);
 			}
 			else {
-				int sizePath =  strlen(filename) + strlen(ep -> d_name);
-				char name[sizePath];
-				strcpy(name, filename);
-				strcat(name, ep -> d_name );
-				if (isRegular(name) == 1){
-					printf("%s è regolare\n", name);
+				int sizePath =  strlen(path) + strlen(ep -> d_name);
+				
+				char filename[sizePath];
+				
+				strcpy(filename, path);
+				strcat(filename, ep -> d_name );
+				
+				if (isRegular(filename) == 1){
+				//	printf("%s è regolare\n", filename);
 					if (logFile != NULL){
-						clock_t t;
-						t = clock();
-						updateList(filename);
-						t = clock() - t;
-						double time_taken = ((double)t)/ CLOCKS_PER_SEC;
-						printf("\nLa funzione ci ha messo %f secondi \n", time_taken);
+						UpdateListwLog(filename);
 					}
 					else {
-					updateList(name);
-					}
+						updateList(filename);
+						}
 					}
 				else {
-					 printf("/n%s non è regolare\n", name); 
-					 if (name[strlen(name)-1] != '.'){  /*ultimo char è .*/
+					// printf("/n%s non è regolare\n", filename); 
+					 if (filename[strlen(filename)-1] != '.'){  /*ultimo char è .*/
 					 if (sub == 0){
 						 /*RECURSIVE*/
 						if(recursive_flag == 1){
-							if (!isLink(name))
+							if (!isLink(filename))
 							{
 							char newname[sizePath + 1];
-							strcpy(newname,name);
+							strcpy(newname,filename);
 							strcat(newname, "/");
 							if (isDirectory(newname)) fileInDirUpdate(newname, 1);
 							}
 						};
 						 /*FOLLOW*/
-						if ((follow_flag == 1) && isLink(name)){
+						if ((follow_flag == 1) && isLink(filename)){
 							char newname[sizePath + 1];
-							strcpy(newname,name);
+							strcpy(newname,filename);
 							strcat(newname, "/");
 							fileInDirUpdate(newname, 1);
 							} 
@@ -318,20 +314,33 @@ int fileInDirUpdate (char* filename, int sub){
 
 parLog* createLogNode(char* filename){
 	parLog *n = malloc(sizeof(parLog));
-	n -> name = filename;
+	n -> name = strdup(filename); /*duplica stringhe, cpia dati da un puntatore ad un altro*/
 	n -> cw = 0;
 	n -> iw = 0;
 	n -> next = NULL;
+	
 	if (firstLogNode == NULL){
 		firstLogNode = n;
 		}
 	else {
-		parLog* app = firstLogNode;
-		while (firstLogNode -> next != NULL) app = app -> next;		
+		parLog* app = firstLogNode;	
+		while (app -> next  != NULL){	
+			app = app-> next;
+		}
 		app -> next = n;
 		}
 	return n;
 	};
+
+void UpdateListwLog(char* filename){
+	parLog* n =createLogNode(filename);
+	clock_t t;
+	t = clock();
+	updateList(filename);
+	t = clock() - t;
+	double time_taken = ((double)t)/ CLOCKS_PER_SEC;
+	n -> time = time_taken;
+};
 
 int isDirectory(char *path) {
    struct stat statbuf;
