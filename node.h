@@ -5,3 +5,8 @@ typedef struct node{
 }node;
 
 node *createNode();
+node* addWord(node*, char*);
+void updateOccurrence(node*);
+
+node* storeString(node*, char*);
+int countWord(char*);
