@@ -201,7 +201,7 @@ void updateList(char* filename){
 			printf("\nLa parola del primo nodo è %s \n", firstNode -> word);
 			}
     	else {
-			storeString(firstNode,buf);
+			storeString(firstNode,buf,alpha_flag);
 		}
 	}
 	} 
