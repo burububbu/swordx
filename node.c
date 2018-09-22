@@ -61,6 +61,11 @@ node* storeString(node* first, char s[], int af)
 				str[i] = s[i];
 				str[i] = tolower(s[i]);
 			}
+			else
+			{
+				str = NULL;
+				break;
+			}
 		}
 		else
 		{
@@ -68,6 +73,11 @@ node* storeString(node* first, char s[], int af)
 			{
 				str[i] = s[i];
 				str[i] = tolower(s[i]);
+			}
+			else
+			{
+				str = NULL;
+				break;
 			}
 		}
 			
