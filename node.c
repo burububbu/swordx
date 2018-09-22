@@ -47,21 +47,28 @@ void updateOccurrence(node* n)
 	n -> occurrence += 1;
 }
 
-node* storeString(node* first, char s[])
+node* storeString(node* first, char s[], int af)
 {
 	char* str= calloc(countWord(s),20);
 	int i = 0;
 	
 	while(s[i] != '\0')
 	{
-		if(isalpha(s[i]) || isdigit(s[i])){
-			str[i] = s[i];
-			str[i] = tolower(s[i]);
+		if(af == 0)
+		{
+			if(isalpha(s[i]) || isdigit(s[i]))
+			{
+				str[i] = s[i];
+				str[i] = tolower(s[i]);
+			}
 		}
 		else
 		{
-			str = NULL;
-			break;
+			if(isalpha(s[i]))
+			{
+				str[i] = s[i];
+				str[i] = tolower(s[i]);
+			}
 		}
 			
 		i++;
