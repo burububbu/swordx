@@ -85,23 +85,10 @@ node* storeString(node* first, char s[], int af, int n)
 	}
 	
 	if(str != NULL)
-	{	
-		if(n == 0)
-		{
-			printf("*%s*\n",str);
-			return addWord(first,str);
-		}
-		else
-		{
-			if(strlen(str) >= n)
-			{
-				printf("*%s*\n",str);
-				return addWord(first,str);
-			}
-		}
+	{
+		printf("*%s*\n",str);
+		return addWord(first,str);
 	}
-	
-	return NULL;
 }
 
 int countWord(char b[])
@@ -118,3 +105,4 @@ int countWord(char b[])
 	
 	return counter;
 }
+
