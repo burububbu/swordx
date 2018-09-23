@@ -19,7 +19,7 @@ static int alpha_flag;
 static int sort_flag;
 
 static char *fileToExclude;
-static int numMin;
+static int numMin = 0;
 static char *fileToIgnore;
 static char *logFile;
 
@@ -103,7 +103,7 @@ int main (int argc, char *argv[]) {
 				fileToExclude = optarg;
 				break;
 		  case 'm':
-				numMin = optarg;
+				numMin = *optarg;
 				break;
 		  case 'i':
 				fileToIgnore = optarg;
