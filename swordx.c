@@ -197,11 +197,11 @@ void updateList(char* filename){
     /* assumes no word exceeds length of 40 */
     while (fscanf(fd, " %40s", buf) == 1) {
 		if (firstNode == NULL){
-			firstNode = storeString(firstNode,buf);
+			firstNode = storeString(firstNode,buf,alpha_flag);
 			printf("\nLa parola del primo nodo è %s \n", firstNode -> word);
 			}
     	else {
-			storeString(firstNode,buf);
+			storeString(firstNode,buf,alpha_flag);
 		}
 	}
 	} 
