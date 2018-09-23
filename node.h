@@ -8,5 +8,5 @@ node *createNode();
 node* addWord(node*, char*);
 void updateOccurrence(node*);
 
-node* storeString(node*, char*, int);
+node* storeString(node*, char*, int, int);
 int countWord(char*);
