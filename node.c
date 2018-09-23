@@ -86,7 +86,7 @@ node* storeString(node* first, char s[], int af, int n)
 	
 	if(str != NULL)
 	{	
-		if(n == NULL)
+		if(n == 0)
 		{
 			printf("*%s*\n",str);
 			return addWord(first,str);
