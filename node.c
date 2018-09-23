@@ -98,10 +98,10 @@ node* storeString(node* first, char s[], int af, int n)
 				printf("*%s*\n",str);
 				return addWord(first,str);
 			}
-			else
-				return NULL;
 		}
 	}
+	
+	return NULL;
 }
 
 int countWord(char b[])
