@@ -84,7 +84,14 @@ node* storeString(node* first, char s[], int af, int n)
 		i++;
 	}
 	
-	if(str != NULL)
+	if(str != NULL && n != 0)
+	{
+		if(strlen(str) >= n){
+			printf("*%s*\n",str);
+			return addWord(first,str);
+		}
+	}
+	else if(str != NULL && n == 0)
 	{
 		printf("*%s*\n",str);
 		return addWord(first,str);
