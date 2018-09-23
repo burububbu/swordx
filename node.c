@@ -33,7 +33,9 @@ node* addWord(node* first, char *str)
 				app = app -> next;
 				}  
 			}
-		if (strcmp(str, app -> word) == 0) {updateOccurrence(app); return NULL;}
+		if (strcmp(str, app -> word) == 0) {
+			updateOccurrence(app); return NULL;
+			}
 		else {	
 		app -> next =createNode(str);
 		}

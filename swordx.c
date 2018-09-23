@@ -41,6 +41,7 @@ void updateList(char*);
 void UpdateListwLog(char*);
 void writeOnFile();
 void writeLogFile();
+void printHelp();
 
 
 int isDirectory(char*);
@@ -74,6 +75,7 @@ int main (int argc, char *argv[]) {
           {"sortbyoccurrence", no_argument, &sort_flag, 1},
           /* These options don’t set a flag.
              We distinguish them by their indices. */
+          {"help",	no_argument, 0,	'h'},
           {"explude",  required_argument, 0, 'e'},
           {"min",  required_argument, 0, 'm'},
           {"ignore",  required_argument, 0, 'i'},
@@ -98,6 +100,10 @@ int main (int argc, char *argv[]) {
 				printf (" with arg %s", optarg);
 			  printf ("\n");
 			  break;
+			
+		  case 'h':
+				printHelp();
+				break;  
 			
 		  case 'e':
 				fileToExclude = optarg;
@@ -340,7 +346,33 @@ void UpdateListwLog(char* filename){
 	t = clock() - t;
 	double time_taken = ((double)t)/ CLOCKS_PER_SEC;
 	n -> time = time_taken;
-};
+}
+
+void printHelp(){
+	printf("swordx [options] [inputs]\n");
+	printf("\tswordx counts the occurrencies of each word input files and print them into a new output file.\n");
+	printf("\n");
+	printf("\t[inputs]\n");
+	printf("\t\t files or Directory to read\n");
+	printf("\t[options]\n");
+	printf("\t\t -h | -help : print help message \n");
+	printf("\t\t -r | -recursive : follow subdirectories \n");
+	printf("\t\t -o <file> | -output <file> : write the result in the <file> (sword.out by default)\n");
+	printf("\t\t -f | -follow : follow links \n");
+	printf("\t\t -e <file> | -explude <file> : exclude <file> from the statistic \n");
+	printf("\t\t -a | -alpha : consider alphabetic characters only \n");
+	printf("\t\t -m <num> | -min <num> : consider words with at least <num> characters\n");
+	printf("\t\t -i <file> | -ignore <file> : exclude words contained in <file> are ignored\n");
+	printf("\t\t -s | -sortbyoccurrence : sort by number of occurrences (file is sorted by alphabetical order by default)\n");
+	printf("\t\t -l <file> | -log <file> : write log informations in <file> \n");
+	printf("\t\t\t the row sintax of this file is \n");
+	printf("\t\t\t <name> cw iw time \n");
+	printf("\t\t\t\t <name> : processed file\n");
+	printf("\t\t\t\t cw : recorded words\n");
+	printf("\t\t\t\t iw : ignored words\n");
+	printf("\t\t\t\t time : file processing time");
+	printf("\n");
+	}
 
 int isDirectory(char *path) {
    struct stat statbuf;
