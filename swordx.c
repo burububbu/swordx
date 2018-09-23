@@ -19,7 +19,7 @@ static int alpha_flag;
 static int sort_flag;
 
 static char *fileToExclude;
-static int numMin;
+static int numMin = 0;
 static char *fileToIgnore;
 static char *logFile;
 
