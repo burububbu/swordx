@@ -93,7 +93,7 @@ node* storeString(node* first, char s[], int af, int n)
 		}
 		else
 		{
-			if(strlen(str) == n)
+			if(strlen(str) >= n)
 			{
 				printf("*%s*\n",str);
 				return addWord(first,str);
