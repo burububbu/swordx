@@ -5,7 +5,6 @@
 #include "node.h"
 
 //create node
-
 node* createNode(char* str)
 {
 	node* n = malloc(sizeof(node));
