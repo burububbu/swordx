@@ -166,7 +166,7 @@ void sort(){
 /* controlla che il nome sia un file o una directory, nel caso in cui fosse una directory */
 void checkName(char* filename){
 	/* se NON è una directory fa l'update della lista passa a updateList il file, se no
-	 *  apre la directory, controlla i file e fa l'updateList su ognuno di loro */
+	 *  apre la directory, controlla i file e fa l'updateList su ognuno di loro*/
 
 	if(isDirectory(filename)== 0){
 	
