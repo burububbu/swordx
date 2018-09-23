@@ -103,7 +103,7 @@ int main (int argc, char *argv[]) {
 				fileToExclude = optarg;
 				break;
 		  case 'm':
-				numMin = *optarg;
+				numMin = atoi(optarg);
 				break;
 		  case 'i':
 				fileToIgnore = optarg;
