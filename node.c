@@ -84,26 +84,22 @@ node* storeString(node* first, char s[], int af, int n)
 		i++;
 	}
 	
-	node* app;
-	
 	if(str != NULL)
 	{	
 		if(n == 0)
 		{
 			printf("*%s*\n",str);
-			app = addWord(first,str);
+			return addWord(first,str);
 		}
 		else
 		{
 			if(strlen(str) == n)
 			{
 				printf("*%s*\n",str);
-				app = addWord(first,str);
+				return addWord(first,str);
 			}
 		}
 	}
-	
-	return app;
 }
 
 int countWord(char b[])
