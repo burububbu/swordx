@@ -100,6 +100,7 @@ node* storeString(node* first, char s[], int af, int n)
 			}
 		}
 	}
+}
 
 int countWord(char b[])
 {
