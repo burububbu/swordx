@@ -388,7 +388,7 @@ int fileInDirUpdate (char* path, int sub)
 
 void UpdateListwLog(char* filename)
 {
-	int n[2];
+	int *n;
 	if (firstLogNode == NULL) firstLogNode = n;
 
 	clock_t t;
