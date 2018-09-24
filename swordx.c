@@ -418,7 +418,6 @@ void UpdateListwLog(char* filename)
 	double time_taken = ((double)t)/ CLOCKS_PER_SEC;
 	n -> time = time_taken;
 }
-<<<<<<< HEAD
 
 void printHelp(){
 	printf("swordx [options] [inputs]\n");
@@ -445,8 +444,6 @@ void printHelp(){
 	printf("\t\t\t\t time : file processing time");
 	printf("\n");
 	}
-=======
->>>>>>> celozzi
 
 int isDirectory(char *path) 
 {
