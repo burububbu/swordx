@@ -16,31 +16,32 @@ node* createNode(char* str)
 	return n;
 }
 
-node* addWord(node* first, char *str)
+node* addWord(node* n, char *str)
 {	
-	node* app = first;
-	if (app == NULL){
+	
+	if (n == NULL){
 		return createNode(str);
 		}
-	else {
-		while (app -> next != NULL){
-			int cmp = strcmp(str, app -> word);
-			if (cmp == 0) {
-				updateOccurrence(app);
-				return NULL;
-				}
-			else {
-				app = app -> next;
-				}  
+	else 
+	{
+		while (n != NULL)
+		{
+			int cmp = strcmp(str, n -> word);
+			
+			if (cmp == 0) 
+			{
+				updateOccurrence(n);
 			}
-		if (strcmp(str, app -> word) == 0) {
-			updateOccurrence(app); return NULL;
+			else 
+			{
+				n -> next = createNode(str);
 			}
-		else {	
-		app -> next =createNode(str);
+			
+			n = n -> next;
 		}
-		return app;
-		}
+		
+		return n;
+	}
 }
 
 void updateOccurrence(node* n)
