@@ -19,7 +19,7 @@ static int alpha_flag;
 static int sort_flag;
 
 static char *fileToExclude;
-static int numMin;
+static int numMin = 0;
 static char *fileToIgnore;
 static char *logFile;
 
@@ -109,7 +109,7 @@ int main (int argc, char *argv[]) {
 				fileToExclude = optarg;
 				break;
 		  case 'm':
-				numMin = *optarg;
+				numMin = atoi(optarg);
 				break;
 		  case 'i':
 				fileToIgnore = optarg;
@@ -203,11 +203,11 @@ void updateList(char* filename){
     /* assumes no word exceeds length of 40 */
     while (fscanf(fd, " %40s", buf) == 1) {
 		if (firstNode == NULL){
-			firstNode = storeString(firstNode,buf,alpha_flag);
+			firstNode = storeString(firstNode,buf,alpha_flag,numMin);
 			printf("\nLa parola del primo nodo è %s \n", firstNode -> word);
 			}
     	else {
-			storeString(firstNode,buf,alpha_flag);
+			storeString(firstNode,buf,alpha_flag,numMin);
 		}
 	}
 	} 

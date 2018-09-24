@@ -48,7 +48,7 @@ void updateOccurrence(node* n)
 	n -> occurrence += 1;
 }
 
-node* storeString(node* first, char s[], int af)
+node* storeString(node* first, char s[], int af, int n)
 {
 	char* str= calloc(countWord(s),20);
 	int i = 0;
@@ -87,8 +87,19 @@ node* storeString(node* first, char s[], int af)
 	
 	if(str != NULL)
 	{
-		printf("*%s*\n",str);
-		return addWord(first,str);
+		if(n == 0)
+		{
+			printf("*%s*\n",str);
+			return addWord(first,str);
+		}
+		else
+		{
+			if(strlen(str) >= n)
+			{
+				printf("*%s*\n",str);
+				return addWord(first,str);
+			}
+		}
 	}
 }
 
