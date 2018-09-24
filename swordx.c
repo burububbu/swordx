@@ -217,7 +217,6 @@ int* counter(node* nod)
 		count[1] += 1;
 	
 	c = count;
-	
 	return c;
 }
 
