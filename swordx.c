@@ -11,7 +11,6 @@
 #include "node.h"
 #include "parLog.h"
 
-
 /* flags */
 static int recursive_flag;
 static int follow_flag;
@@ -65,6 +64,7 @@ int main (int argc, char *argv[])
 			  {"sortbyoccurrency", no_argument, &sort_flag, 1},
 			  /* These options set a flag.
 				 We distinguish them by their indices. */
+			  {"help",  no_argument, 0, 'h'},
 			  {"explude",  required_argument, 0, 'e'},
 			  {"min",  required_argument, 0, 'm'},
 			  {"ignore",  required_argument, 0, 'i'},
