@@ -205,7 +205,7 @@ void checkName(char* filename)
 	}
 }
 
-int[] counter(node* n)
+int* counter(node* n)
 {
 	int count[2] = {0,0};
 	
