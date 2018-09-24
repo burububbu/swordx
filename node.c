@@ -31,16 +31,16 @@ node* addWord(node* n, char *str)
 			if (cmp == 0) 
 			{
 				updateOccurrence(n);
+				return n;
 			}
 			else 
 			{
 				n -> next = createNode(str);
+				return n;
 			}
 			
 			n = n -> next;
 		}
-		
-		return n;
 	}
 }
 
@@ -62,7 +62,7 @@ node* storeString(node* first, char s[], int af, int n)
 			{
 				str[i] = tolower(s[i]);
 			}
-			else
+			else if(strlen(str) == 0)
 			{
 				str = NULL;
 				break;
@@ -74,7 +74,7 @@ node* storeString(node* first, char s[], int af, int n)
 			{
 				str[i] = tolower(s[i]);
 			}
-			else
+			else if(strlen(str) == 0)
 			{
 				str = NULL;
 				break;
