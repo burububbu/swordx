@@ -404,6 +404,9 @@ void UpdateListwLog(char* filename)
 	
 	double time_taken = ((double)t)/ CLOCKS_PER_SEC;
 	n -> time = time_taken;
+	
+	count[0] = 0;
+	count[1] = 0;
 }
 
 void printHelp(){
