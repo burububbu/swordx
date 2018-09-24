@@ -211,11 +211,11 @@ int* counter(node* n)
 	int count[2] = {0,0};
 	
 	if(n != NULL)
-		count[0]++;
+		count[0] += 1;
 	else
-		count[1]++;
+		count[1] += 1;
 	
-	return count;
+	return *count;
 }
 
 int* updateList(char* filename)
