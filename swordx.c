@@ -27,7 +27,8 @@ char *outputFile = "sword.out";
 
 void sort();
 void checkName(char*);
-void updateList(char*);
+int* counter(node*);
+int* updateList(char*);
 void UpdateListwLog(char*);
 void writeOnFile();
 void writeLogFile();
