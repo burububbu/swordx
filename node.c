@@ -116,4 +116,3 @@ int countWord(char b[])
 	
 	return counter;
 }
-
