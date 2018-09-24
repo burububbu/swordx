@@ -206,16 +206,18 @@ void checkName(char* filename)
 	}
 }
 
-int* counter(node* n)
+int* counter(node* nod)
 {
 	int count[2] = {0,0};
 	
-	if(n != NULL)
+	if(nod != NULL)
 		count[0] += 1;
 	else
 		count[1] += 1;
 	
-	return *count;
+	int* c = count;
+	
+	return c;
 }
 
 int* updateList(char* filename)
