@@ -59,7 +59,6 @@ node* storeString(node* first, char s[], int af, int n)
 		{
 			if(isalpha(s[i]) || isdigit(s[i]))
 			{
-				str[i] = s[i];
 				str[i] = tolower(s[i]);
 			}
 			else
@@ -72,7 +71,6 @@ node* storeString(node* first, char s[], int af, int n)
 		{
 			if(isalpha(s[i]))
 			{
-				str[i] = s[i];
 				str[i] = tolower(s[i]);
 			}
 			else
@@ -101,6 +99,8 @@ node* storeString(node* first, char s[], int af, int n)
 			}
 		}
 	}
+	
+	return NULL;
 }
 
 int countWord(char b[])
