@@ -204,11 +204,25 @@ void checkName(char* filename)
 		fileInDirUpdate(filename, 0); 
 	}
 }
-	
-void updateList(char* filename)
+
+int* counter(node* n)
 {
+	int count[2] = {0,0};
+	
+	if(n != NULL)
+		count[0]++;
+	else
+		count[1]++;
+	
+	return count;
+}
+
+int* updateList(char* filename)
+{
+	int c[2];
 	FILE *fd;
 	char buf[40];
+	node* app;
 	fd = fopen(filename, "r");
 	
 	if( fd==NULL )
@@ -225,10 +239,12 @@ void updateList(char* filename)
 			{
 				firstNode = storeString(firstNode,buf,alpha_flag,numMin);
 				printf("\nLa parola del primo nodo è %s \n", firstNode -> word);
+				count = counter(firstNode);
 			}
 			else 
 			{
-				storeString(firstNode,buf,alpha_flag,numMin);
+				app = storeString(firstNode,buf,alpha_flag,numMin);
+				c = counter(app);
 			}
 		}
 	} 
@@ -371,13 +387,14 @@ int fileInDirUpdate (char* path, int sub)
 
 void UpdateListwLog(char* filename)
 {
-	parLog* n =createLogNode(filename, 2, 2, firstLogNode);
+	int n[2];
 	if (firstLogNode == NULL) firstLogNode = n;
 
 	clock_t t;
 	t = clock();
 	
-	updateList(filename);
+	n = updateList(filename);
+	parLog* n =createLogNode(filename, n[0], n[1], firstLogNode);
 	t = clock() - t;
 	
 	double time_taken = ((double)t)/ CLOCKS_PER_SEC;
