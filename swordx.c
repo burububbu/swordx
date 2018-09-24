@@ -9,6 +9,7 @@
 #include <dirent.h>
 #include <time.h>
 #include "node.h"
+#include "parLog.h"
 
 
 /* flags */
@@ -25,16 +26,6 @@ static char *logFile;
 
 char *outputFile = "sword.out";
 
-
-/*struttura utilizzata in CheckName() e fileInDirUpdate()*/
-typedef struct parLog{
-	char* name;
-	int cw;
-	int iw;
-	double time;
-	struct parLog *next;
-}parLog;
-
 void sort();
 void checkName(char*);
 void updateList(char*);
@@ -48,15 +39,11 @@ int isDirectory(char*);
 int isRegular(char*);
 int isLink(char*);
 int fileInDirUpdate(char*, int); /*lista, file name, boolean is is a  sub or not*/
-char* createPath (char*, char*);
-parLog* createLogNode(char*);
 
 
 /*deve cambiare in firstNode*/
 static node* firstNode;
-
 static parLog* firstLogNode;
-
 /*
  * argc num parametri
  * argv array di puntatori ai parametri (parti da argv[1])
@@ -382,33 +369,11 @@ int fileInDirUpdate (char* path, int sub)
 	return 0;
 }
 
-parLog* createLogNode(char* filename)
-{
-	parLog *n = malloc(sizeof(parLog));
-	n -> name = strdup(filename); /*duplica stringhe, cpia dati da un puntatore ad un altro*/
-	n -> cw = 0;
-	n -> iw = 0;
-	n -> next = NULL;
-	
-	if (firstLogNode == NULL)
-	{
-		firstLogNode = n;
-	}
-	else 
-	{
-		parLog* app = firstLogNode;	
-		while (app -> next  != NULL)
-		{	
-			app = app-> next;
-		}
-		app -> next = n;
-	}
-	return n;
-}
-
 void UpdateListwLog(char* filename)
 {
-	parLog* n =createLogNode(filename);
+	parLog* n =createLogNode(filename, 2, 2, firstLogNode);
+	if (firstLogNode == NULL) firstLogNode = n;
+
 	clock_t t;
 	t = clock();
 	
