@@ -205,7 +205,7 @@ void checkName(char* filename)
 	}
 }
 
-int[] counter(node* n)
+int* counter(node* n)
 {
 	int count[2] = {0,0};
 	
@@ -217,7 +217,7 @@ int[] counter(node* n)
 	return count;
 }
 
-int[] updateList(char* filename)
+int* updateList(char* filename)
 {
 	int c[2];
 	FILE *fd;
@@ -239,7 +239,7 @@ int[] updateList(char* filename)
 			{
 				firstNode = storeString(firstNode,buf,alpha_flag,numMin);
 				printf("\nLa parola del primo nodo è %s \n", firstNode -> word);
-				count = counter(firstNode);
+				c = counter(firstNode);
 			}
 			else 
 			{
@@ -247,7 +247,8 @@ int[] updateList(char* filename)
 				c = counter(app);
 			}
 		}
-	} 
+	}
+	return c;
 }
 
 void writeOnFile()
