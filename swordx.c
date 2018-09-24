@@ -74,7 +74,7 @@ int main (int argc, char *argv[])
 			  {"recursive", no_argument, &recursive_flag, 1},
 			  {"follow", no_argument, &follow_flag, 1},
 			  {"alpha", no_argument, &alpha_flag, 1},
-			  {"sortbyoccurrence", no_argument, &sort_flag, 1},
+			  {"sortbyoccurrency", no_argument, &sort_flag, 1},
 			  /* These options don’t set a flag.
 				 We distinguish them by their indices. */
 			  {"explude",  required_argument, 0, 'e'},
@@ -168,7 +168,7 @@ void sort()
 {
 	if (sort_flag == 0)
 	{
-		int size = ((strlen(outputFile)*2) + 9); /* 10 -> 1 + 8 (length di " sort -o " )*/
+		int size = ((strlen(outputFile)*2) + 9); /* 9 -> 1 + 8 (length di " sort -o " )*/
 		char inout[size];
 		strcpy(inout, "sort -o ");
 		strcat(inout, outputFile);
@@ -179,9 +179,9 @@ void sort()
 	/*SORT BY OCCURRENCE*/
 	else 
 	{
-		int size = ((strlen(outputFile)*2) + 12); /* 10 -> 1 + 11 (length di " sort -n -o " )*/
+		int size = ((strlen(outputFile)*2) + 17); /* 17 -> 1 + 16 (length di " sort -n -o " )*/
 		char inout[size];
-		strcpy(inout, "sort -n -o ");
+		strcpy(inout, "sort -k 2 -n -o ");
 		strcat(inout, outputFile);
 		strcat(inout, " ");
 		strcat(inout, outputFile);
