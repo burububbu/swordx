@@ -15,7 +15,6 @@
 static int recursive_flag;
 static int follow_flag;
 static int alpha_flag;
-
 static int sort_flag;
 
 static char *fileToExclude;
@@ -76,7 +75,7 @@ int main (int argc, char *argv[])
 		  };
 		  
         int option_index = 0;
-		c = getopt_long_only (argc, argv, "e:m:i:l:o:", long_options, &option_index);
+		c = getopt_long_only (argc, argv, "he:m:i:l:o:", long_options, &option_index);
 	  
 		/* Detect the end of the options. */
 		if (c == -1) break;
@@ -94,7 +93,6 @@ int main (int argc, char *argv[])
 				
 				  printf ("\n");
 				  break;
-			
 		  case 'h':
 				printHelp();
 				break;  
@@ -115,7 +113,7 @@ int main (int argc, char *argv[])
 					outputFile = optarg;
 					break;
 		  case '?':
-					/* getopt_long already printed an error message. */
+			/* getopt_long already printed an error message. */
 					break;
 		  default:
 					abort ();
@@ -186,19 +184,21 @@ void sort()
 /* controlla che il nome sia un file o una directory, nel caso in cui fosse una directory */
 void checkName(char* filename)
 {
-	/* se NON è una directory fa l'update della lista passa a updateList il file, se no
+	/* se non � una directory fa l'update della lista passa a updateList il file, se no
 	 *  apre la directory, controlla i file e fa l'updateList su ognuno di loro*/
 
 	if(isDirectory(filename)== 0)
 	{
-		if (logFile == NULL)
-		{
-			updateList(filename);
-		}
-		/* LOG FILE __exec time*/
-		else 
-		{
-			UpdateListwLog(filename);
+		if (isRegular(filename) == 1){
+			if (logFile == NULL)
+			{
+				updateList(filename);
+			}
+			/* LOG FILE __exec time*/
+			else 
+			{
+				UpdateListwLog(filename);
+			}
 		}
 	}
 	else
@@ -337,7 +337,6 @@ int fileInDirUpdate (char* path, int sub)
 				
 				if (isRegular(filename) == 1)
 				{
-					//printf("%s è regolare\n", filename);
 					if (logFile != NULL)
 					{
 						UpdateListwLog(filename);
@@ -349,10 +348,9 @@ int fileInDirUpdate (char* path, int sub)
 				}
 				else 
 				{
-					// printf("/n%s non è regolare\n", filename); 
-					 if (filename[strlen(filename)-1] != '.')
+					 if (filename[0] != '.')
 					 {  
-					 	 /*ultimo char è .*/
+					 	 /*primo char � .*/
 						 if (sub == 0)
 						 {
 							 /*RECURSIVE*/
