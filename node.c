@@ -23,7 +23,7 @@ node* addWord(node* first, char *str)
 		return createNode(str);
 		}
 	else {
-		while (app -> next != NULL){
+		while (app != NULL){
 			int cmp = strcmp(str, app -> word);
 			if (cmp == 0) {
 				updateOccurrence(app);
