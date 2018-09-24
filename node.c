@@ -16,31 +16,32 @@ node* createNode(char* str)
 	return n;
 }
 
-node* addWord(node* first, char *str)
+node* addWord(node* n, char *str)
 {	
-	node* app = first;
-	if (app == NULL){
+	
+	if (n == NULL){
 		return createNode(str);
 		}
-	else {
-		while (app != NULL){
-			int cmp = strcmp(str, app -> word);
-			if (cmp == 0) {
-				updateOccurrence(app);
-				return NULL;
-				}
-			else {
-				app = app -> next;
-				}  
+	else 
+	{
+		while (n != NULL)
+		{
+			int cmp = strcmp(str, n -> word);
+			
+			if (cmp == 0) 
+			{
+				updateOccurrence(n);
+				return n;
 			}
-		if (strcmp(str, app -> word) == 0) {
-			updateOccurrence(app); return NULL;
+			else 
+			{
+				n -> next = createNode(str);
+				return n;
 			}
-		else {	
-		app -> next =createNode(str);
+			
+			n = n -> next;
 		}
-		return app;
-		}
+	}
 }
 
 void updateOccurrence(node* n)
@@ -59,10 +60,9 @@ node* storeString(node* first, char s[], int af, int n)
 		{
 			if(isalpha(s[i]) || isdigit(s[i]))
 			{
-				str[i] = s[i];
 				str[i] = tolower(s[i]);
 			}
-			else
+			else if(strlen(str) == 0)
 			{
 				str = NULL;
 				break;
@@ -72,10 +72,9 @@ node* storeString(node* first, char s[], int af, int n)
 		{
 			if(isalpha(s[i]))
 			{
-				str[i] = s[i];
 				str[i] = tolower(s[i]);
 			}
-			else
+			else if(strlen(str) == 0)
 			{
 				str = NULL;
 				break;
@@ -101,6 +100,8 @@ node* storeString(node* first, char s[], int af, int n)
 			}
 		}
 	}
+	
+	return NULL;
 }
 
 int countWord(char b[])

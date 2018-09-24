@@ -22,11 +22,13 @@ static int numMin = 0;
 static char *wordToIgnore;
 static char *logFile;
 
+int count[2] = {0,0};
 char *outputFile = "sword.out";
 
 void sort();
 void checkName(char*);
-void updateList(char*);
+int* counter(node*);
+int* updateList(char*);
 void UpdateListwLog(char*);
 void writeOnFile();
 void writeLogFile();
@@ -204,11 +206,26 @@ void checkName(char* filename)
 		fileInDirUpdate(filename, 0); 
 	}
 }
-	
-void updateList(char* filename)
+
+int* counter(node* nod)
 {
+	int* c;
+	
+	if(nod != NULL)
+		count[0] += 1;
+	else
+		count[1] += 1;
+	
+	c = count;
+	return c;
+}
+
+int* updateList(char* filename)
+{
+	int *c;
 	FILE *fd;
 	char buf[40];
+	node* app;
 	fd = fopen(filename, "r");
 	
 	if( fd==NULL )
@@ -225,13 +242,16 @@ void updateList(char* filename)
 			{
 				firstNode = storeString(firstNode,buf,alpha_flag,numMin);
 				printf("\nLa parola del primo nodo è %s \n", firstNode -> word);
+				c = counter(firstNode);
 			}
 			else 
 			{
-				storeString(firstNode,buf,alpha_flag,numMin);
+				app = storeString(firstNode,buf,alpha_flag,numMin);
+				c = counter(app);
 			}
 		}
-	} 
+	}
+	return c;
 }
 
 void writeOnFile()
@@ -369,17 +389,22 @@ int fileInDirUpdate (char* path, int sub)
 
 void UpdateListwLog(char* filename)
 {
-	parLog* n =createLogNode(filename, 2, 2, firstLogNode);
-	if (firstLogNode == NULL) firstLogNode = n;
+	int *num;
 
 	clock_t t;
 	t = clock();
 	
-	updateList(filename);
+	num = updateList(filename);
+	parLog* n =createLogNode(filename, num[0], num[1], firstLogNode);
+	if (firstLogNode == NULL) firstLogNode = n;
+	
 	t = clock() - t;
 	
 	double time_taken = ((double)t)/ CLOCKS_PER_SEC;
 	n -> time = time_taken;
+	
+	count[0] = 0;
+	count[1] = 0;
 }
 
 void printHelp(){
