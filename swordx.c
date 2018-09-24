@@ -76,7 +76,7 @@ int main (int argc, char *argv[])
 			  {"follow", no_argument, &follow_flag, 1},
 			  {"alpha", no_argument, &alpha_flag, 1},
 			  {"sortbyoccurrency", no_argument, &sort_flag, 1},
-			  /* These options don’t set a flag.
+			  /* These options set a flag.
 				 We distinguish them by their indices. */
 			  {"explude",  required_argument, 0, 'e'},
 			  {"min",  required_argument, 0, 'm'},
@@ -418,7 +418,6 @@ void UpdateListwLog(char* filename)
 	double time_taken = ((double)t)/ CLOCKS_PER_SEC;
 	n -> time = time_taken;
 }
-<<<<<<< HEAD
 
 void printHelp(){
 	printf("swordx [options] [inputs]\n");
@@ -445,8 +444,6 @@ void printHelp(){
 	printf("\t\t\t\t time : file processing time");
 	printf("\n");
 	}
-=======
->>>>>>> celozzi
 
 int isDirectory(char *path) 
 {
