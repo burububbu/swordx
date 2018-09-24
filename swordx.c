@@ -205,7 +205,7 @@ void checkName(char* filename)
 	}
 }
 
-int* counter(node* n)
+int[] counter(node* n)
 {
 	int count[2] = {0,0};
 	
@@ -219,7 +219,7 @@ int* counter(node* n)
 
 int* updateList(char* filename)
 {
-	int c[2];
+	int *c;
 	FILE *fd;
 	char buf[40];
 	node* app;
@@ -388,7 +388,7 @@ int fileInDirUpdate (char* path, int sub)
 
 void UpdateListwLog(char* filename)
 {
-	int num[2];
+	int *num;
 
 	clock_t t;
 	t = clock();
