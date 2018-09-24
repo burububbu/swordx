@@ -388,14 +388,15 @@ int fileInDirUpdate (char* path, int sub)
 
 void UpdateListwLog(char* filename)
 {
-	int *n;
-	if (firstLogNode == NULL) firstLogNode = n;
+	int num[2];
 
 	clock_t t;
 	t = clock();
 	
-	n = updateList(filename);
-	parLog* n =createLogNode(filename, n[0], n[1], firstLogNode);
+	num = updateList(filename);
+	parLog* n =createLogNode(filename, num[0], num[1], firstLogNode);
+	if (firstLogNode == NULL) firstLogNode = n;
+	
 	t = clock() - t;
 	
 	double time_taken = ((double)t)/ CLOCKS_PER_SEC;
