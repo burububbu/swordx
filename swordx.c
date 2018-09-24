@@ -23,6 +23,7 @@ static int numMin = 0;
 static char *wordToIgnore;
 static char *logFile;
 
+int count[2] = {0,0};
 char *outputFile = "sword.out";
 
 void sort();
@@ -208,14 +209,14 @@ void checkName(char* filename)
 
 int* counter(node* nod)
 {
-	int count[2] = {0,0};
+	int* c;
 	
 	if(nod != NULL)
 		count[0] += 1;
 	else
 		count[1] += 1;
 	
-	int* c = count;
+	c = count;
 	
 	return c;
 }
