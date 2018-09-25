@@ -32,7 +32,7 @@ int* updateList(char*);
 void UpdateListwLog(char*);
 void writeOnFile();
 void writeLogFile();
-void readIgnore(char*);
+node* readIgnore(char*);
 void printHelp();
 
 
@@ -247,7 +247,7 @@ int* updateList(char* filename)
 			
 			if (firstNode == NULL)
 			{
-				if(strcmp(l == NULL || l -> word != buf)
+				if(l == NULL || strcmp(l -> word != buf))
 				{
 					firstNode = storeString(firstNode,buf,alpha_flag,numMin);
 					printf("\nLa parola del primo nodo è %s \n", firstNode -> word);
@@ -256,7 +256,7 @@ int* updateList(char* filename)
 			}
 			else 
 			{
-				if(strcmp(l == NULL || l -> word != buf)
+				if(l == NULL || strcmp(l -> word != buf))
 				{
 					app = storeString(firstNode,buf,alpha_flag,numMin);
 					c = counter(app);
