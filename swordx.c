@@ -253,6 +253,8 @@ int* updateList(char* filename)
 					printf("\nLa parola del primo nodo è %s \n", firstNode -> word);
 					c = counter(firstNode);
 				}
+				else
+					c = counter(NULL);
 			}
 			else 
 			{
@@ -261,6 +263,8 @@ int* updateList(char* filename)
 					app = storeString(firstNode,buf,alpha_flag,numMin);
 					c = counter(app);
 				}
+				else
+					c = counter(NULL);
 			}
 		}
 	}
