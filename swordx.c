@@ -428,7 +428,7 @@ node* readIgnore()
 	char buf[40];
 	static node* node;
 	fd = fopen(wordToIgnore, "r");
-	printf("\nFile: %s\n",fd);
+	
 	if( fd==NULL )
 	{
 		perror("Errore in apertura del file");
