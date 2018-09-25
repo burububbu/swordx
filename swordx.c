@@ -242,7 +242,7 @@ int* updateList(char* filename)
 		{
 			if(wordToIgnore != NULL)
 			{
-				l = readIgnore();
+				l = readIgnore(wordToIgnore);
 			}
 			
 			if (firstNode == NULL)
