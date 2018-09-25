@@ -19,7 +19,7 @@ static int sort_flag;
 
 static char *fileToExclude;
 static int numMin = 0;
-static char *wordToIgnore;
+static char *wordToIgnore = NULL;
 static char *logFile;
 
 int count[2] = {0,0};
@@ -32,6 +32,7 @@ int* updateList(char*);
 void UpdateListwLog(char*);
 void writeOnFile();
 void writeLogFile();
+void readIgnore(char*);
 void printHelp();
 
 
@@ -226,6 +227,7 @@ int* updateList(char* filename)
 	FILE *fd;
 	char buf[40];
 	node* app;
+	node* l;
 	fd = fopen(filename, "r");
 	
 	if( fd==NULL )
@@ -238,16 +240,27 @@ int* updateList(char* filename)
 		/* assumes no word exceeds length of 40 */
 		while (fscanf(fd, " %40s", buf) == 1) 
 		{
+			if(wordToIgnore != NULL)
+			{
+				l = readIgnore();
+			}
+			
 			if (firstNode == NULL)
 			{
-				firstNode = storeString(firstNode,buf,alpha_flag,numMin);
-				printf("\nLa parola del primo nodo è %s \n", firstNode -> word);
-				c = counter(firstNode);
+				if(strcmp(l == NULL || l -> word != buf)
+				{
+					firstNode = storeString(firstNode,buf,alpha_flag,numMin);
+					printf("\nLa parola del primo nodo è %s \n", firstNode -> word);
+					c = counter(firstNode);
+				}
 			}
 			else 
 			{
-				app = storeString(firstNode,buf,alpha_flag,numMin);
-				c = counter(app);
+				if(strcmp(l == NULL || l -> word != buf)
+				{
+					app = storeString(firstNode,buf,alpha_flag,numMin);
+					c = counter(app);
+				}
 			}
 		}
 	}
@@ -406,6 +419,33 @@ void UpdateListwLog(char* filename)
 	count[0] = 0;
 	count[1] = 0;
 }
+node* readIgnore(char* filename)
+{
+	char *c;
+	FILE *fd;
+	char buf[40];
+	node* node;
+	fd = fopen(filename, "r");
+	
+	if( fd==NULL )
+	{
+		perror("Errore in apertura del file");
+		exit(1);
+	}
+	else 
+	{
+		/* assumes no word exceeds length of 40 */
+		while (fscanf(fd, " %40s", buf) == 1) 
+		{
+			if(node == NULL)
+				node = storeString(node,buf,alpha_flag,numMin);
+			else
+				storeString(node,buf,alpha_flag,numMin);
+		}
+	}
+	
+	return node;
+}
 
 void printHelp(){
 	printf("swordx [options] [inputs]\n");
@@ -422,7 +462,7 @@ void printHelp(){
 	printf("\t\t -a | -alpha : consider alphabetic characters only \n");
 	printf("\t\t -m <num> | -min <num> : consider words with at least <num> characters\n");
 	printf("\t\t -i <file> | -ignore <file> : exclude words contained in <file> are ignored\n");
-	printf("\t\t -s | -sortbyoccurrence : sort by number of occurrences (file is sorted by alphabetical order by default)\n");
+	printf("\t\t -s | -sortbyoccurrency : sort by number of occurrences (file is sorted by alphabetical order by default)\n");
 	printf("\t\t -l <file> | -log <file> : write log informations in <file> \n");
 	printf("\t\t\t the row sintax of this file is \n");
 	printf("\t\t\t <name> cw iw time \n");
