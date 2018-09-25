@@ -43,7 +43,7 @@ node* addWord(node* n, char *str)
 
 node* find(node* n, char* str)
 {
-	while (n -> next != NULL)
+	while (n != NULL)
 	{
 		int cmp = strcmp(str, n -> word);
 		
