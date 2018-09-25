@@ -6,6 +6,7 @@ typedef struct node{
 
 node *createNode();
 node* addWord(node*, char*);
+node* find(node*, char*);
 void updateOccurrence(node*);
 node* storeString(node*, char*, int, int);
 char* alphaControl(int , int);
