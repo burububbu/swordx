@@ -247,7 +247,7 @@ int* updateList(char* filename)
 			
 			if (firstNode == NULL)
 			{
-				if(l == NULL || strcmp(l -> word != buf))
+				if(l == NULL || (strcmp(l -> word,buf) != 0))
 				{
 					firstNode = storeString(firstNode,buf,alpha_flag,numMin);
 					printf("\nLa parola del primo nodo è %s \n", firstNode -> word);
@@ -256,7 +256,7 @@ int* updateList(char* filename)
 			}
 			else 
 			{
-				if(l == NULL || strcmp(l -> word != buf))
+				if(l == NULL || (strcmp(l -> word, buf) != 0))
 				{
 					app = storeString(firstNode,buf,alpha_flag,numMin);
 					c = counter(app);
