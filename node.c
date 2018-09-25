@@ -18,29 +18,41 @@ node* createNode(char* str)
 
 node* addWord(node* n, char *str)
 {	
-	
-	if (n == NULL){
-		return createNode(str);
-		}
-	else 
+	if (n == NULL)
 	{
-		while (n != NULL)
+		return createNode(str);
+	}
+	
+	node* a = find(n,str);
+	
+	if(a != NULL)
+	{
+		updateOccurrence(a);
+		return a;
+	}
+	else
+	{
+		while(n -> next != NULL)
 		{
-			int cmp = strcmp(str, n -> word);
-			
-			if (cmp == 0) 
-			{
-				updateOccurrence(n);
-				return n;
-			}
-			else 
-			{
-				n -> next = createNode(str);
-				return n;
-			}
-			
 			n = n -> next;
 		}
+		
+		return n -> next = createNode(str);
+	}
+}
+
+node* find(node* n, char* str)
+{
+	while (n -> next != NULL)
+	{
+		int cmp = strcmp(str, n -> word);
+		
+		if (cmp == 0) 
+		{
+			return n;
+		}
+		
+		n = n -> next;
 	}
 }
 
@@ -49,7 +61,7 @@ void updateOccurrence(node* n)
 	n -> occurrence += 1;
 }
 
-node* storeString(node* first, char s[], int af, int n)
+node* storeString(node* first, char s[], int af, int num)
 {
 	char* str= calloc(countWord(s),20);
 	int i = 0;
@@ -86,14 +98,14 @@ node* storeString(node* first, char s[], int af, int n)
 	
 	if(str != NULL)
 	{
-		if(n == 0)
+		if(num == 0)
 		{
 			printf("*%s*\n",str);
 			return addWord(first,str);
 		}
 		else
 		{
-			if(strlen(str) >= n)
+			if(strlen(str) >= num)
 			{
 				printf("*%s*\n",str);
 				return addWord(first,str);
