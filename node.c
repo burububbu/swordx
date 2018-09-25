@@ -43,9 +43,18 @@ node* addWord(node* n, char *str)
 
 node* find(node* n, char* str)
 {
+	char* s = calloc(strlen(str),40);
+	int i = 0;
+	
+	while(i < strlen(str))
+	{
+		s[i] = tolower(str[i]);
+		i++;
+	}
+	
 	while (n != NULL)
 	{
-		int cmp = strcmp(str, n -> word);
+		int cmp = strcmp(s, n -> word);
 		
 		if (cmp == 0) 
 		{
@@ -63,7 +72,7 @@ void updateOccurrence(node* n)
 
 node* storeString(node* first, char s[], int af, int num)
 {
-	char* str= calloc(countWord(s),20);
+	char* str = calloc(strlen(s),40);
 	int i = 0;
 	
 	while(s[i] != '\0')
