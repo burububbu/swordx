@@ -19,28 +19,41 @@ node* createNode(char* str)
 node* addWord(node* n, char *str)
 {	
 	
-	if (n == NULL){
-		return createNode(str);
-		}
-	else 
+	if (n == NULL)
 	{
-		while (n != NULL)
+		return createNode(str);
+	}
+	
+	node* a = find(n,str);
+	
+	if(a != NULL)
+	{
+		updateOccurrence(a);
+		return a;
+	}
+	else
+	{
+		while(n -> next != NULL)
 		{
-			int cmp = strcmp(str, n -> word);
-			
-			if (cmp == 0) 
-			{
-				updateOccurrence(n);
-				return n;
-			}
-			else 
-			{
-				n -> next = createNode(str);
-				return n;
-			}
-			
 			n = n -> next;
 		}
+		
+		return n -> next = createNode(str);
+	}
+}
+
+node* find(node* n, cahr* str)
+{
+	while (n != NULL)
+	{
+		int cmp = strcmp(str, n -> word);
+		
+		if (cmp == 0) 
+		{
+			return n;
+		}
+		
+		n = n -> next;
 	}
 }
 
