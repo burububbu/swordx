@@ -185,7 +185,7 @@ void sort()
 /* controlla che il nome sia un file o una directory, nel caso in cui fosse una directory */
 void checkName(char* filename)
 {
-	/* se non è una directory fa l'update della lista passa a updateList il file, se no
+	/* se non Ã¨ una directory fa l'update della lista passa a updateList il file, se no
 	 *  apre la directory, controlla i file e fa l'updateList su ognuno di loro*/
 
 	if(isDirectory(filename)== 0)
@@ -250,7 +250,7 @@ int* updateList(char* filename)
 				if(l == NULL || (find(l,buf) == NULL))
 				{
 					firstNode = storeString(firstNode,buf,alpha_flag,numMin);
-					printf("\nLa parola del primo nodo è %s \n", firstNode -> word);
+					printf("\nLa parola del primo nodo Ã¨ %s \n", firstNode -> word);
 					c = counter(firstNode);
 				}
 			}
@@ -338,7 +338,7 @@ int fileInDirUpdate (char* path, int sub)
 			if ((fileToExclude != NULL) && (strcmp(ep -> d_name, fileToExclude) == 0))
 			{
 				 printf ("\n escludo il file %s dalla statistica\n", ep -> d_name);
-			}
+			} /*primo carattere del nome Ã¨ ., serve per evitare . e ..*/
 			else if (ep -> d_name[0] != '.')
 			{
 				int sizePath =  strlen(path) + strlen(ep -> d_name);
@@ -360,31 +360,30 @@ int fileInDirUpdate (char* path, int sub)
 					}
 				}
 				else 
-				{ 
-					 /*primo char è .*/
-					 if (sub == 0)
-					 {
-						 /*RECURSIVE*/
-						if(recursive_flag == 1)
-						{
-							if (!isLink(filename))
-							{
-								char newname[sizePath + 1];
-								strcpy(newname,filename);
-								strcat(newname, "/");
-								if (isDirectory(newname)) fileInDirUpdate(newname, 1);
-							}
-						}
-						 /*FOLLOW*/
-						if ((follow_flag == 1) && isLink(filename))
+				{  
+				 if (sub == 0)
+				 {
+					 /*RECURSIVE*/
+					if(recursive_flag == 1)
+					{
+						if (!isLink(filename))
 						{
 							char newname[sizePath + 1];
 							strcpy(newname,filename);
 							strcat(newname, "/");
-							fileInDirUpdate(newname, 1);
-						} 
-					 }
-				}
+							if (isDirectory(newname)) fileInDirUpdate(newname, 1);
+						}
+					}
+					 /*FOLLOW*/
+					if ((follow_flag == 1) && isLink(filename))
+					{
+						char newname[sizePath + 1];
+						strcpy(newname,filename);
+						strcat(newname, "/");
+						fileInDirUpdate(newname, 1);
+					} 
+				 }
+			   }
 			}
 		}
 		(void) closedir (dp);
