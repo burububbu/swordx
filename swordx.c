@@ -32,7 +32,7 @@ int* updateList(char*);
 void UpdateListwLog(char*);
 void writeOnFile();
 void writeLogFile();
-node* readIgnore(char*);
+node* readIgnore();
 void printHelp();
 
 
@@ -106,7 +106,6 @@ int main (int argc, char *argv[])
 					break;
 		  case 'i':
 					wordToIgnore = optarg;
-					printf("File :%s",wordToIgnore);
 					break;
 		  case 'l':
 					logFile = optarg;
@@ -420,8 +419,10 @@ void UpdateListwLog(char* filename)
 	count[0] = 0;
 	count[1] = 0;
 }
+
 node* readIgnore()
 {
+	printf("\nFile: %s\n",wordToIgnore);
 	char *c;
 	FILE *fd;
 	char buf[40];
