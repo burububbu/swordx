@@ -227,7 +227,7 @@ int* updateList(char* filename)
 	FILE *fd;
 	char buf[40];
 	node* app;
-	node* l;
+	node* l = NULL;
 	fd = fopen(filename, "r");
 	
 	if( fd==NULL )
