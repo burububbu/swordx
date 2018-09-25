@@ -339,7 +339,7 @@ int fileInDirUpdate (char* path, int sub)
 			{
 				 printf ("\n escludo il file %s dalla statistica\n", ep -> d_name);
 			}
-			else 
+			else if (ep -> d_name[0] != '.')
 			{
 				int sizePath =  strlen(path) + strlen(ep -> d_name);
 				
@@ -360,32 +360,29 @@ int fileInDirUpdate (char* path, int sub)
 					}
 				}
 				else 
-				{
-					 if (filename[0] != '.')
-					 {  
-					 	 /*primo char è .*/
-						 if (sub == 0)
-						 {
-							 /*RECURSIVE*/
-							if(recursive_flag == 1)
-							{
-								if (!isLink(filename))
-								{
-									char newname[sizePath + 1];
-									strcpy(newname,filename);
-									strcat(newname, "/");
-									if (isDirectory(newname)) fileInDirUpdate(newname, 1);
-								}
-							}
-							 /*FOLLOW*/
-							if ((follow_flag == 1) && isLink(filename))
+				{ 
+					 /*primo char è .*/
+					 if (sub == 0)
+					 {
+						 /*RECURSIVE*/
+						if(recursive_flag == 1)
+						{
+							if (!isLink(filename))
 							{
 								char newname[sizePath + 1];
 								strcpy(newname,filename);
 								strcat(newname, "/");
-								fileInDirUpdate(newname, 1);
-							} 
-						 }
+								if (isDirectory(newname)) fileInDirUpdate(newname, 1);
+							}
+						}
+						 /*FOLLOW*/
+						if ((follow_flag == 1) && isLink(filename))
+						{
+							char newname[sizePath + 1];
+							strcpy(newname,filename);
+							strcat(newname, "/");
+							fileInDirUpdate(newname, 1);
+						} 
 					 }
 				}
 			}
