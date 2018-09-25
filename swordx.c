@@ -106,6 +106,7 @@ int main (int argc, char *argv[])
 					break;
 		  case 'i':
 					wordToIgnore = optarg;
+					printf("File :%s",wordToIgnore);
 					break;
 		  case 'l':
 					logFile = optarg;
@@ -242,7 +243,7 @@ int* updateList(char* filename)
 		{
 			if(wordToIgnore != NULL)
 			{
-				l = readIgnore(wordToIgnore);
+				l = readIgnore();
 			}
 			
 			if (firstNode == NULL)
@@ -419,13 +420,13 @@ void UpdateListwLog(char* filename)
 	count[0] = 0;
 	count[1] = 0;
 }
-node* readIgnore(char* filename)
+node* readIgnore()
 {
 	char *c;
 	FILE *fd;
 	char buf[40];
 	node* node;
-	fd = fopen(filename, "r");
+	fd = fopen(wordToIgnore, "r");
 	
 	if( fd==NULL )
 	{
