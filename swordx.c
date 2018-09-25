@@ -422,7 +422,6 @@ void UpdateListwLog(char* filename)
 
 node* readIgnore()
 {
-	printf("\nFile: %s\n",wordToIgnore);
 	char *c;
 	FILE *fd;
 	char buf[40];
