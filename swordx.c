@@ -414,7 +414,7 @@ void UpdateListwLog(char* filename)
 void readIgnore()
 {
 	wordsToIgnore = malloc(sizeof(char**));
-	int i = 1;
+	int i = 0;
 	FILE *fd;
 	char buf[40];
 	fd = fopen(wordToIgnore, "r");
@@ -429,10 +429,11 @@ void readIgnore()
 		/* assumes no word exceeds length of 40 */
 		while (fscanf(fd, " %40s", buf) == 1) 
 		{
-			wordsToIgnore[i-1] = strdup(buf);
+			wordsToIgnore[i] = strdup(buf);
 			i++;
+			wordsToIgnore = (char**) realloc(wordsToIgnore, sizeof(char*)* i+1);
 			printf("\nl'indice sz è %d", i);
-			wordsToIgnore = (char**) realloc(wordsToIgnore, sizeof(char*)* i);
+			
 		}
 	}
 }
