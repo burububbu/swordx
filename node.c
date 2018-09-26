@@ -56,13 +56,13 @@ node* find(node* n, char* str)
 	{
 		int cmp = strcmp(s, n -> word);
 		
-		if (cmp == 0) 
-		{
+		if (cmp == 0)
 			return n;
-		}
 		
 		n = n -> next;
 	}
+	
+	return NULL;
 }
 
 void updateOccurrence(node* n)
