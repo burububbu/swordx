@@ -49,7 +49,7 @@ node* updateOccurrence(node* n)
  * num : num min
  * wordsToIgnore : pointer to an array of pointers to words to ignore
  * */
-node* storeString(node* first, char s[], int af, int num, char ** wordsToIgnore)
+node* storeString(node* first, char s[], int af, int num, char** wordsToIgnore)
 {
 	if (wordsToIgnore != NULL) 
 		printf("\nIgnoro delle parole in un file\n");
@@ -105,14 +105,14 @@ node* storeString(node* first, char s[], int af, int num, char ** wordsToIgnore)
 		if(num == 0)
 		{
 			printf("*%s*\n",str);
-			return handleIgnored(str, wordsToIgnore);
+			return handleIgnored(first, str, wordsToIgnore);
 		}
 		else
 		{
 			if(strlen(str) >= num)
 			{
 				printf("*%s*\n",str);
-				return handleIgnored(str, wordsToIgnore);
+				return handleIgnored(first, str, wordsToIgnore);
 			}
 		}
 	}
