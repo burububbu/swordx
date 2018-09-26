@@ -22,11 +22,11 @@ vpath %.h $(LIBD)
 # all needs swordx
 all: swordx
 
-# swordx needs objects
+# swordx include objects
 swordx: $(OBJ)
 	$(CC) $^ $(CFLAGS) -o $@
 
-# objects are into OBJDIR and include .c and .h
+# objects are into OBJD and include .c and .h
 $(OBJD)/%.o: %.c %.h
 	$(CC) $(CFLAGS) -o $@ -c $<
 
