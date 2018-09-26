@@ -32,8 +32,9 @@ int* updateList(char*);
 void UpdateListwLog(char*);
 void writeOnFile();
 void writeLogFile();
-node* readIgnore();
+void readIgnore();
 void printHelp();
+
 
 
 int isDirectory(char*);
@@ -45,6 +46,9 @@ int fileInDirUpdate(char*, int); /*lista, file name, boolean is is a  sub or not
 /*deve cambiare in firstNode*/
 static node* firstNode;
 static parLog* firstLogNode;
+static char ** wordsToIgnore;
+
+
 /*
  * argc num parametri
  * argv array di puntatori ai parametri (parti da argv[1])
@@ -106,6 +110,7 @@ int main (int argc, char *argv[])
 					break;
 		  case 'i':
 					wordToIgnore = optarg;
+					readIgnore();
 					break;
 		  case 'l':
 					logFile = optarg;
@@ -188,7 +193,7 @@ void sort()
 /* controlla che il nome sia un file o una directory, nel caso in cui fosse una directory */
 void checkName(char* filename)
 {
-	/* se non Ã¨ una directory fa l'update della lista passa a updateList il file, se no
+	/* se non è una directory fa l'update della lista passa a updateList il file, se no
 	 *  apre la directory, controlla i file e fa l'updateList su ognuno di loro*/
 
 	if(isDirectory(filename)== 0)
@@ -242,32 +247,16 @@ int* updateList(char* filename)
 	{
 		/* assumes no word exceeds length of 40 */
 		while (fscanf(fd, " %40s", buf) == 1) 
-		{
-			if(wordToIgnore != NULL)
-			{
-				l = readIgnore();
-			}
-			
+		{	
 			if (firstNode == NULL)
 			{
-				if(l == NULL || (find(l,buf) == NULL))
-				{
-					firstNode = storeString(firstNode,buf,alpha_flag,numMin);
-					printf("\nLa parola del primo nodo Ã¨ %s \n", firstNode -> word);
-					c = counter(firstNode);
+				firstNode = storeString(firstNode,buf,alpha_flag,numMin, wordsToIgnore);
+				c = counter(firstNode);
 				}
-				else
-					c = counter(NULL);
-			}
 			else 
 			{
-				if(l == NULL || (find(l,buf) == NULL))
-				{
-					app = storeString(firstNode,buf,alpha_flag,numMin);
-					c = counter(app);
-				}
-				else
-					c = counter(NULL);
+				app = storeString(firstNode,buf,alpha_flag,numMin,wordsToIgnore);
+				c = counter(app);
 			}
 		}
 	}
@@ -345,7 +334,7 @@ int fileInDirUpdate (char* path, int sub)
 			if ((fileToExclude != NULL) && (strcmp(ep -> d_name, fileToExclude) == 0))
 			{
 				 printf ("\n escludo il file %s dalla statistica\n", ep -> d_name);
-			} /*primo carattere del nome Ã¨ ., serve per evitare . e ..*/
+			}
 			else if (ep -> d_name[0] != '.')
 			{
 				int sizePath =  strlen(path) + strlen(ep -> d_name);
@@ -367,30 +356,31 @@ int fileInDirUpdate (char* path, int sub)
 					}
 				}
 				else 
-				{  
-				 if (sub == 0)
-				 {
-					 /*RECURSIVE*/
-					if(recursive_flag == 1)
-					{
-						if (!isLink(filename))
+				{ 
+					 /*primo char è .*/
+					 if (sub == 0)
+					 {
+						 /*RECURSIVE*/
+						if(recursive_flag == 1)
+						{
+							if (!isLink(filename))
+							{
+								char newname[sizePath + 1];
+								strcpy(newname,filename);
+								strcat(newname, "/");
+								if (isDirectory(newname)) fileInDirUpdate(newname, 1);
+							}
+						}
+						 /*FOLLOW*/
+						if ((follow_flag == 1) && isLink(filename))
 						{
 							char newname[sizePath + 1];
 							strcpy(newname,filename);
 							strcat(newname, "/");
-							if (isDirectory(newname)) fileInDirUpdate(newname, 1);
-						}
-					}
-					 /*FOLLOW*/
-					if ((follow_flag == 1) && isLink(filename))
-					{
-						char newname[sizePath + 1];
-						strcpy(newname,filename);
-						strcat(newname, "/");
-						fileInDirUpdate(newname, 1);
-					} 
-				 }
-			   }
+							fileInDirUpdate(newname, 1);
+						} 
+					 }
+				}
 			}
 		}
 		(void) closedir (dp);
@@ -423,11 +413,12 @@ void UpdateListwLog(char* filename)
 	count[1] = 0;
 }
 
-node* readIgnore()
+void readIgnore()
 {
+	wordsToIgnore = malloc(sizeof(char**));
+	int i = 0;
 	FILE *fd;
 	char buf[40];
-	static node* node;
 	fd = fopen(wordToIgnore, "r");
 	
 	if( fd==NULL )
@@ -440,14 +431,11 @@ node* readIgnore()
 		/* assumes no word exceeds length of 40 */
 		while (fscanf(fd, " %40s", buf) == 1) 
 		{
-			if(node == NULL)
-				node = storeString(node,buf,alpha_flag,numMin);
-			else
-				storeString(node,buf,alpha_flag,numMin);
+			wordsToIgnore[i] = strdup(buf);
+			i++;
+			wordsToIgnore = (char**) realloc(wordsToIgnore, sizeof(char*)* i+1);
 		}
 	}
-	
-	return node;
 }
 
 void printHelp(){
@@ -475,6 +463,7 @@ void printHelp(){
 	printf("\t\t\t\t time : file processing time");
 	printf("\n");
 	}
+
 
 int isDirectory(char *path) 
 {
