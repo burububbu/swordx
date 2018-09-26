@@ -7,7 +7,7 @@
 parLog* createLogNode(char* filename, int cw1, int iw1, parLog* first)
 {
 	parLog *n = malloc(sizeof(parLog));
-	n -> name = strdup(filename); /*duplica stringhe, cpia dati da un puntatore ad un altro*/
+	n -> name = strdup(filename);
 	n -> cw = cw1;
 	n -> iw = iw1;
 	n -> next = NULL;

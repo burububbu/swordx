@@ -4,7 +4,6 @@
 #include <ctype.h>
 #include "node.h"
 
-//create node
 node* createNode(char* str)
 {
 	node* n = malloc(sizeof(node));
@@ -30,7 +29,7 @@ node* addWord(node* n, char *str)
 		}
 		n = n -> next;
 	}
-	/*contorlla ultimo nodo*/
+	/*coltrols last node*/
 	if(strcmp(str, n -> word) == 0)
 	{
 		return updateOccurrence(n);
@@ -50,9 +49,9 @@ node* updateOccurrence(node* n)
 }
 /*
  * first : first node
- * s[] : stringa letta
+ * s[] : string
  * af : alpha flag
- * num : num min
+ * num : min length
  * wordstoignore : pointer to an array of pointer with parole da ignorare
  * */
 node* storeString(node* first, char s[], int af, int num, char ** wordsToIgnore)
@@ -157,6 +156,7 @@ node* storeString(node* first, char s[], int af, int num, char ** wordsToIgnore)
 	}
 	return NULL;
 }
+
 
 int isIgnored(char* str, char** wordsToIgnore){
 	int i = 0;
