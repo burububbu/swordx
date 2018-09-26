@@ -43,18 +43,9 @@ node* addWord(node* n, char *str)
 
 node* find(node* n, char* str)
 {
-	char* s = calloc(strlen(str),40);
-	int i = 0;
-	
-	while(i < strlen(str))
+	while (n -> next != NULL)
 	{
-		s[i] = tolower(str[i]);
-		i++;
-	}
-	
-	while (n != NULL)
-	{
-		int cmp = strcmp(s, n -> word);
+		int cmp = strcmp(str, n -> word);
 		
 		if (cmp == 0) 
 		{
@@ -70,9 +61,13 @@ void updateOccurrence(node* n)
 	n -> occurrence += 1;
 }
 
-node* storeString(node* first, char s[], int af, int num)
+node* storeString(node* first, char s[], int af, int num, char ** wordsToIgnore)
 {
-	char* str = calloc(strlen(s),40);
+	printIgnore(wordsToIgnore);
+	if (wordsToIgnore[0] != NULL) printf("ok");
+	
+	char* str= calloc(countWord(s),20);
+	
 	int i = 0;
 	
 	while(s[i] != '\0')
@@ -110,18 +105,31 @@ node* storeString(node* first, char s[], int af, int num)
 		if(num == 0)
 		{
 			printf("*%s*\n",str);
+			if ((wordsToIgnore[0] != NULL) && isIgnored(str, wordsToIgnore))
+			{
+				return NULL;
+			}
+			else 
+			{
 			return addWord(first,str);
+			}
 		}
 		else
 		{
 			if(strlen(str) >= num)
 			{
 				printf("*%s*\n",str);
+				if ((wordsToIgnore[0] != NULL) && isIgnored(str, wordsToIgnore))
+				{
+					return NULL;
+				}
+				else 
+				{
 				return addWord(first,str);
 			}
 		}
+	} 
 	}
-	
 	return NULL;
 }
 
@@ -139,3 +147,21 @@ int countWord(char b[])
 	
 	return counter;
 }
+
+int isIgnored(char* str, char** wordsToIgnore){
+	int i = 0;
+	while (wordsToIgnore[i] != NULL){
+		if (strcmp(str,wordsToIgnore[i]) == 0) return 1;
+		i++;
+	 }
+	return 0;
+	}
+
+	
+void printIgnore(char** wordsToIgnore){
+	int i = 0;
+	while (wordsToIgnore[i] != NULL){
+		 printf("\n%s \n", wordsToIgnore[i]);
+		 i++;
+	 }
+	};
