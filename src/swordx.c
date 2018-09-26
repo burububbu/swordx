@@ -152,8 +152,11 @@ int main (int argc, char *argv[])
 			writeLogFile();
 		}
 	}
-	else("There aren't input files");
-	exit (0);
+	else
+	{
+		printf("There aren't input files");
+		exit(0);
+	}
 }
 
 void sort()
@@ -336,7 +339,7 @@ int fileInDirUpdate (char* path, int sub)
 	
 	if (dp != NULL)
     { 
-		while (ep = readdir (dp))
+		while ((ep = readdir (dp)))
 		{
 			/* EXCLUDE FILE */
 			if ((fileToExclude != NULL) && (strcmp(ep -> d_name, fileToExclude) == 0))
@@ -422,7 +425,6 @@ void UpdateListwLog(char* filename)
 
 node* readIgnore()
 {
-	char *c;
 	FILE *fd;
 	char buf[40];
 	static node* node;
