@@ -33,6 +33,10 @@ $(OBJD)/%.o: %.c %.h
 # node include node.h
 $(OBJD)/node.o: node.c node.h
 	$(CC) $(CFLAGS) -o $@ -c $<
+	
+# parLog include parLog
+$(OBJD)/parLog.o: parLog.c parLog.h
+	$(CC) $(CFLAGS) -o $@ -c $<
 
 # swordx needs .c and all .h files
 $(OBJD)/swordx.o: swordx.c node.h parLog.h
