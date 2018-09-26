@@ -70,7 +70,7 @@ void updateOccurrence(node* n)
 node* storeString(node* first, char s[], int af, int num, char ** wordsToIgnore)
 {
 	if (wordsToIgnore != NULL) printf("\nIgnoro delle parole in un file\n");
-	char* str= calloc(countWord(s),40); 
+	char* str= calloc(strlen(s),sizeof(char)); 
 	
 	int i = 0;
 	
@@ -168,21 +168,6 @@ node* storeString(node* first, char s[], int af, int num, char ** wordsToIgnore)
 	} 
 	}
 	return NULL;
-}
-
-int countWord(char b[])
-{
-	int i = 0;
-	int counter = 0;
-	
-	while(i <= strlen(b))
-	{
-		if(b[i] == ' ' || b[i] == '\0')
-			counter++;
-		i++;
-	}
-	
-	return counter;
 }
 
 int isIgnored(char* str, char** wordsToIgnore){
