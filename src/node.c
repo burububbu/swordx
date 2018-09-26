@@ -67,8 +67,8 @@ node* storeString(node* first, char s[], int af, int num, char ** wordsToIgnore)
 		/*if (isalpha(s[i]))
 		{
 			str[i] = tolower(s[i]);
-			}
-		/*nel caso in cui può essere un numero ED è un numero*/
+			}*/
+		//nel caso in cui può essere un numero ED è un numero
 		/*else if (af == 0)
 		{
 			if (isdigit(s[i]))

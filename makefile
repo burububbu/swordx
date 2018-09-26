@@ -34,7 +34,7 @@ $(OBJD)/%.o: %.c %.h
 $(OBJD)/node.o: node.c node.h
 	$(CC) $(CFLAGS) -o $@ -c $<
 	
-# parLog include parLog
+# parLog include parLog.h
 $(OBJD)/parLog.o: parLog.c parLog.h
 	$(CC) $(CFLAGS) -o $@ -c $<
 
