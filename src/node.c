@@ -120,12 +120,12 @@ node* storeString(node* first, char s[], int af, int num, char ** wordsToIgnore)
 	return NULL;
 }
 
-node* handleIgnored(char* s, char** wTI)
+node* handleIgnored(node* f, char* s, char** wTI)
 {
-	if ((wTI != NULL) && isIgnored(str, wTI))
+	if ((wTI != NULL) && isIgnored(s, wTI))
 		return NULL;
 	else
-		return addWord(first,str);
+		return addWord(f,s);
 }
 
 int isIgnored(char* str, char** wordsToIgnore)
