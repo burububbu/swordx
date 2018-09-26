@@ -60,18 +60,51 @@ void updateOccurrence(node* n)
 {
 	n -> occurrence += 1;
 }
-
+/*
+ * first : first node
+ * s[] : stringa letta
+ * af : alpha flag
+ * num : num min
+ * wordstoignore : pointer to an array of pointer with parole da ignorare
+ * */
 node* storeString(node* first, char s[], int af, int num, char ** wordsToIgnore)
 {
-	printIgnore(wordsToIgnore);
-	if (wordsToIgnore[0] != NULL) printf("ok");
-	
-	char* str= calloc(countWord(s),20);
+	if (wordsToIgnore != NULL) printf("\nIgnoro delle parole in un file\n");
+	char* str= calloc(countWord(s),40); 
 	
 	int i = 0;
 	
 	while(s[i] != '\0')
 	{
+		/*if (isalpha(s[i]))
+		{
+			str[i] = tolower(s[i]);
+			}
+		/*nel caso in cui può essere un numero ED è un numero*/
+		/*else if (af == 0)
+		{
+			if (isdigit(s[i]))
+			{
+				str[i] = s[i];
+			}
+			else
+			{
+				return NULL;
+				}
+		} 
+		
+		else
+			{
+				//str = NULL;
+				//break;
+				return NULL;
+			} 
+		else if(strlen(str) == 0)
+		{
+			str = NULL;
+			break;
+		} */
+		
 		if(af == 0)
 		{
 			if(isalpha(s[i]) || isdigit(s[i]))
@@ -90,22 +123,26 @@ node* storeString(node* first, char s[], int af, int num, char ** wordsToIgnore)
 			{
 				str[i] = tolower(s[i]);
 			}
+			else if(isdigit(s[i]))
+			{
+				return NULL;
+			}
 			else if(strlen(str) == 0)
 			{
 				str = NULL;
 				break;
 			}
 		}
+		
 			
 		i++;
-	}
-	
+		}	
 	if(str != NULL)
 	{
 		if(num == 0)
 		{
 			printf("*%s*\n",str);
-			if ((wordsToIgnore[0] != NULL) && isIgnored(str, wordsToIgnore))
+			if ((wordsToIgnore!= NULL) && isIgnored(str, wordsToIgnore))
 			{
 				return NULL;
 			}
@@ -119,7 +156,7 @@ node* storeString(node* first, char s[], int af, int num, char ** wordsToIgnore)
 			if(strlen(str) >= num)
 			{
 				printf("*%s*\n",str);
-				if ((wordsToIgnore[0] != NULL) && isIgnored(str, wordsToIgnore))
+				if ((wordsToIgnore != NULL) && isIgnored(str, wordsToIgnore))
 				{
 					return NULL;
 				}

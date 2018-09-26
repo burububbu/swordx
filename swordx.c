@@ -248,7 +248,6 @@ int* updateList(char* filename)
 			if (firstNode == NULL)
 			{
 				firstNode = storeString(firstNode,buf,alpha_flag,numMin, wordsToIgnore);
-				printf("\nLa parola del primo nodo è %s \n", firstNode -> word);
 				c = counter(firstNode);
 				}
 			else 
@@ -432,8 +431,6 @@ void readIgnore()
 			wordsToIgnore[i] = strdup(buf);
 			i++;
 			wordsToIgnore = (char**) realloc(wordsToIgnore, sizeof(char*)* i+1);
-			printf("\nl'indice sz è %d", i);
-			
 		}
 	}
 }
