@@ -22,43 +22,29 @@ node* addWord(node* n, char *str)
 	{
 		return createNode(str);
 	}
-	
-	node* a = find(n,str);
-	
-	if(a != NULL)
+	while(n -> next != NULL)
 	{
-		updateOccurrence(a);
-		return a;
+		if (strcmp(str, n -> word) == 0)
+		{
+			return updateOccurrence(n);
+		}
+		n = n -> next;
 	}
+	
+	if(strcmp(str, n -> word) == 0)
+	{
+		return updateOccurrence(n);
+		}
 	else
 	{
-		while(n -> next != NULL)
-		{
-			n = n -> next;
-		}
-		
 		return n -> next = createNode(str);
 	}
 }
 
-node* find(node* n, char* str)
-{
-	while (n -> next != NULL)
-	{
-		int cmp = strcmp(str, n -> word);
-		
-		if (cmp == 0) 
-		{
-			return n;
-		}
-		
-		n = n -> next;
-	}
-}
-
-void updateOccurrence(node* n)
+node* updateOccurrence(node* n)
 {
 	n -> occurrence += 1;
+	return n;
 }
 /*
  * first : first node
