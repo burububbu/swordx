@@ -40,20 +40,14 @@ void printHelp();
 int isDirectory(char*);
 int isRegular(char*);
 int isLink(char*);
-int fileInDirUpdate(char*, int); /*lista, file name, boolean is is a  sub or not*/
+int fileInDirUpdate(char*, int); /*list, file name, boolean is is a  sub or not*/
 
 
-/*deve cambiare in firstNode*/
 static node* firstNode;
 static parLog* firstLogNode;
 static char ** wordsToIgnore;
 
 
-/*
- * argc num parametri
- * argv array di puntatori ai parametri (parti da argv[1])
- * 
- * */
 int main (int argc, char *argv[]) 
 {
 	char **files;
@@ -144,18 +138,14 @@ int main (int argc, char *argv[])
 		}
 			
 		for (int j= 0; j < z; j++)
-		{
 			checkName(files[j]);
-		}
 			
 		free(files);
 		writeOnFile(outputFile);
 		sort(); 
 		
-		if (logFile != NULL) 
-		{ 
+		if (logFile != NULL)
 			writeLogFile();
-		}
 	}
 	else
 	{
@@ -198,22 +188,17 @@ void checkName(char* filename)
 
 	if(isDirectory(filename)== 0)
 	{
-		if (isRegular(filename) == 1){
+		if (isRegular(filename) == 1)
+		{
 			if (logFile == NULL)
-			{
 				updateList(filename);
-			}
 			/* LOG FILE __exec time*/
 			else 
-			{
 				UpdateListwLog(filename);
-			}
 		}
 	}
 	else
-	{
-		fileInDirUpdate(filename, 0); 
-	}
+		fileInDirUpdate(filename, 0);
 }
 
 int* counter(node* nod)
@@ -251,7 +236,7 @@ int* updateList(char* filename)
 			{
 				firstNode = storeString(firstNode,buf,alpha_flag,numMin, wordsToIgnore);
 				c = counter(firstNode);
-				}
+			}
 			else 
 			{
 				app = storeString(firstNode,buf,alpha_flag,numMin,wordsToIgnore);
@@ -283,7 +268,7 @@ void writeOnFile()
 		int number = (po -> occurrence);
 		fprintf(fp, " %d \n", number);
 		po = (po -> next);
-	};
+	}
 	
 	fflush(fp);
 	fclose(fp);
@@ -314,7 +299,7 @@ void writeLogFile()
 	fflush(fp);
 	fclose(fp);
 	
-	printf("\nFile di log %s creato!\n", logFile);
+	printf("\n%s created!\n", logFile);
 }
 
 /*sub is 0 if the dir is a subdir, 1 otherwise
@@ -331,9 +316,6 @@ int fileInDirUpdate (char* path, int sub)
 		{
 			/* EXCLUDE FILE */
 			if ((fileToExclude != NULL) && (strcmp(ep -> d_name, fileToExclude) == 0))
-			{
-				 printf ("\n escludo il file %s dalla statistica\n", ep -> d_name);
-			}
 			else if (ep -> d_name[0] != '.')
 			{
 				int sizePath =  strlen(path) + strlen(ep -> d_name);
@@ -346,13 +328,9 @@ int fileInDirUpdate (char* path, int sub)
 				if (isRegular(filename) == 1)
 				{
 					if (logFile != NULL)
-					{
 						UpdateListwLog(filename);
-					}
 					else 
-					{
 						updateList(filename);
-					}
 				}
 				else 
 				{ 
@@ -437,7 +415,8 @@ void readIgnore()
 	}
 }
 
-void printHelp(){
+void printHelp()
+{
 	printf("swordx [options] [inputs]\n");
 	printf("\tswordx counts the occurrencies of each word input files and print them into a new output file.\n");
 	printf("\n");
@@ -461,7 +440,7 @@ void printHelp(){
 	printf("\t\t\t\t iw : ignored words\n");
 	printf("\t\t\t\t time : file processing time");
 	printf("\n");
-	}
+}
 
 
 int isDirectory(char *path) 
