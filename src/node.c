@@ -53,15 +53,16 @@ node* storeString(node* first, char s[], int af, int num, char ** wordsToIgnore)
 	char* str= calloc(strlen(s),sizeof(char)); 
 	
 	int i = 0;
+	int z = 1;
 	
 	while(s[i] != '\0')
 	{
 		if(isalpha(s[i]))
-			str[i] = tolower(s[i]);
+			str[z-1] = tolower(s[i]);
 		else if(isdigit(s[i]))
 		{
 			if(af == 0)
-				str[i] = s[i];
+				str[z-1] = s[i];
 			else
 				return NULL;
 		}
@@ -70,12 +71,18 @@ node* storeString(node* first, char s[], int af, int num, char ** wordsToIgnore)
 			str = NULL;
 			break;
 		}
+		else
+		{
+		 z--;
+			}
 
 		i++;
+		z++;
 	}
 	
 	if(str != NULL)
 	{
+		
 		if (strlen(str) >= num)
 			{
 				if((wordsToIgnore != NULL) && isIgnored(str, wordsToIgnore))
