@@ -10,4 +10,3 @@ node* updateOccurrence(node*);
 node* storeString(node*, char*, int, int, char**);
 char* alphaControl(int , int);
 int isIgnored(char*, char**);
-void printIgnore(char**);
