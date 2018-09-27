@@ -11,7 +11,7 @@ node* createNode(char* str)
 	n -> word = str;
 	n -> occurrence = 1;
 	n -> next = NULL;
-	
+
 	return n;
 }
 
@@ -50,9 +50,6 @@ node* updateOccurrence(node* n)
  * */
 node* storeString(node* first, char s[], int af, int num, char ** wordsToIgnore)
 {
-	if (wordsToIgnore != NULL) 
-		printf("\nIgnoro delle parole in un file\n");
-	
 	char* str= calloc(strlen(s),sizeof(char)); 
 	
 	int i = 0;
@@ -108,15 +105,4 @@ int isIgnored(char* str, char** wordsToIgnore)
 	}
 	 
 	return 0;
-}
-	
-void printIgnore(char** wordsToIgnore)
-{
-	int i = 0;
-	
-	while (wordsToIgnore[i] != NULL)
-	{
-		 printf("\n%s \n", wordsToIgnore[i]);
-		 i++;
-	}
 }
