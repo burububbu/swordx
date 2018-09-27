@@ -1,4 +1,3 @@
-/*struttura utilizzata in CheckName() e fileInDirUpdate()*/
 typedef struct parLog{
 	char* name;
 	int cw;

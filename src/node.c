@@ -4,7 +4,6 @@
 #include <ctype.h>
 #include "node.h"
 
-//create node
 node* createNode(char* str)
 {
 	node* n = malloc(sizeof(node));
@@ -28,7 +27,7 @@ node* addWord(node* n, char *str)
 		
 		n = n -> next;
 	}
-	/*contorlla ultimo nodo*/
+	/*coltrols last node*/
 	if(strcmp(str, n -> word) == 0)
 		return updateOccurrence(n);
 	else
@@ -44,7 +43,7 @@ node* updateOccurrence(node* n)
 }
 /*
  * first : first node
- * s[] : stringa letta
+ * s[] : string
  * af : alpha flag
  * num : num min
  * wordsToIgnore : pointer to an array of pointers to words to ignore
@@ -59,29 +58,7 @@ node* storeString(node* first, char s[], int af, int num, char ** wordsToIgnore)
 	int i = 0;
 	
 	while(s[i] != '\0')
-	{		
-		/*if(af == 0)
-		{
-			if(isalpha(s[i]) || isdigit(s[i]))
-				str[i] = tolower(s[i]);
-			else if(strlen(str) == 0)
-			{
-				str = NULL;
-				break;
-			}
-		}
-		else
-		{
-			if(isalpha(s[i]))
-				str[i] = tolower(s[i]);
-			else if(isdigit(s[i]))
-				return NULL;
-			else if(strlen(str) == 0)
-			{
-				str = NULL;
-				break;
-			}
-		}*/
+	{
 		if(isalpha(s[i]))
 			str[i] = tolower(s[i]);
 		else if(isdigit(s[i]))
@@ -96,20 +73,21 @@ node* storeString(node* first, char s[], int af, int num, char ** wordsToIgnore)
 			str = NULL;
 			break;
 		}
-		
+
 		i++;
 	}
 	
 	if(str != NULL)
 	{
-			printf("*%s*\n",str);
-			
-			if (strlen(str) >= num)
+		if (strlen(str) >= num)
 			{
 				if((wordsToIgnore != NULL) && isIgnored(str, wordsToIgnore))
 					return NULL;
 				else
+				{
+					printf("*%s*\n",str);
 					return addWord(first,str);
+				}
 			}
 			else
 				return NULL;
@@ -141,5 +119,4 @@ void printIgnore(char** wordsToIgnore)
 		 printf("\n%s \n", wordsToIgnore[i]);
 		 i++;
 	}
-	
 }
