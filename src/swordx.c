@@ -316,6 +316,8 @@ int fileInDirUpdate (char* path, int sub)
 		{
 			/* EXCLUDE FILE */
 			if ((fileToExclude != NULL) && (strcmp(ep -> d_name, fileToExclude) == 0))
+			{
+			}
 			else if (ep -> d_name[0] != '.')
 			{
 				int sizePath =  strlen(path) + strlen(ep -> d_name);
