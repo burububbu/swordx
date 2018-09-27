@@ -94,7 +94,7 @@ int main (int argc, char *argv[])
 				  break;
 		  case 'h':
 				printHelp();
-				break;  
+				exit(0);
 			
 		  case 'e':
 					fileToExclude = optarg;
@@ -149,7 +149,7 @@ int main (int argc, char *argv[])
 	}
 	else
 	{
-		printf("There aren't input files");
+		printf("There aren't input files\r\n");
 		exit(0);
 	}
 }
