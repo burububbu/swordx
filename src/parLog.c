@@ -15,9 +15,9 @@ parLog* createLogNode(char* filename, int cw1, int iw1, parLog* first)
 	if (first != NULL)
 	{
 		parLog* app = first;
-		while (app -> next != NULL){
+		while (app -> next != NULL)
 			app = app -> next;
-			}
+		
 		app -> next = n;
 	}
 	
