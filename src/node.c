@@ -82,7 +82,6 @@ node* storeString(node* first, char s[], int af, int num, char ** wordsToIgnore)
 					return NULL;
 				else
 				{
-					printf("*%s*\n",str);
 					return addWord(first,str);
 				}
 			}

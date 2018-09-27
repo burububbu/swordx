@@ -40,7 +40,7 @@ char* canPath(char*);
 int isDirectory(char*);
 int isRegular(char*);
 int isLink(char*);
-int fileInDirUpdate(char*, int); /*list, file name, boolean is is a  sub or not*/
+int fileInDirUpdate(char*);
 
 
 static node* firstNode;
@@ -129,13 +129,11 @@ int main (int argc, char *argv[])
 		files = calloc(size, sizeof(char**));
 		
 		int z = 0;
-		printf ("input files: \n ");
 		
 		while (optind < argc)
 		{
 			files[z] = argv[optind];
 			optind++;
-			printf ("%s \n", files[z]);
 			z++;
 		}
 			
@@ -186,7 +184,6 @@ void sort()
 void checkName(char* filename)
 {
 	filename = canPath(filename);
-	printf("\n%s\n", filename);
 	/* se non è una directory fa l'update della lista passa a updateList il file, se no
 	 *  apre la directory, controlla i file e fa l'updateList su ognuno di loro*/
 	if(isDirectory(filename)== 0)
@@ -201,7 +198,7 @@ void checkName(char* filename)
 		}
 	}
 	else
-		fileInDirUpdate(filename, 0);
+		fileInDirUpdate(filename);
 }
 
 int* counter(node* nod)
@@ -301,13 +298,11 @@ void writeLogFile()
 	
 	fflush(fp);
 	fclose(fp);
-	
-	printf("\n%s created!\n", logFile);
 }
 
 /*sub is 0 if the dir is a subdir, 1 otherwise
  * 1 -> not recursion*/
-int fileInDirUpdate (char* path, int sub)
+int fileInDirUpdate (char* path)
 {
 	DIR *dp;
 	struct dirent *ep;
@@ -340,26 +335,22 @@ int fileInDirUpdate (char* path, int sub)
 				}
 				else 
 				{ 
-					 /*primo char è .*/
-					 if (sub == 0)
-					 {
-						 /*RECURSIVE*/
-						if(recursive_flag == 1)
+					 /*RECURSIVE*/
+					if(recursive_flag == 1)
+					{
+						if (!isLink(filename))
 						{
-							if (!isLink(filename))
-							{
-								if (isDirectory(filename)) fileInDirUpdate(filename, 1);
-							}
+							if (isDirectory(filename)) fileInDirUpdate(filename);
 						}
-						 /*FOLLOW*/
-						if ((follow_flag == 1) && isLink(filename))
-						{
-							fileInDirUpdate(filename, 1);
-						} 
-					 }
+					}
+					 /*FOLLOW*/
+					if ((follow_flag == 1) && isLink(filename))
+					{
+						fileInDirUpdate(filename);
+					} 
+				}
 				}
 			}
-		}
 		(void) closedir (dp);
 	}
 	else 
