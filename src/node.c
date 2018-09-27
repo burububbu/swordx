@@ -63,96 +63,36 @@ node* storeString(node* first, char s[], int af, int num, char ** wordsToIgnore)
 	
 	while(s[i] != '\0')
 	{
-		/*if (isalpha(s[i]))
-		{
+		if(isalpha(s[i]))
 			str[i] = tolower(s[i]);
-			}*/
-		//nel caso in cui può essere un numero ED è un numero
-		/*else if (af == 0)
+		else if(isdigit(s[i]))
 		{
-			if (isdigit(s[i]))
-			{
+			if(af == 0)
 				str[i] = s[i];
-			}
 			else
-			{
 				return NULL;
-				}
-		} 
-		
-		else
-			{
-				//str = NULL;
-				//break;
-				return NULL;
-			} 
+		}
 		else if(strlen(str) == 0)
 		{
 			str = NULL;
 			break;
-		} */
-		
-		if(af == 0)
-		{
-			if(isalpha(s[i]) || isdigit(s[i]))
-			{
-				str[i] = tolower(s[i]);
-			}
-			else if(strlen(str) == 0)
-			{
-				str = NULL;
-				break;
-			}
 		}
-		else
-		{
-			if(isalpha(s[i]))
-			{
-				str[i] = tolower(s[i]);
-			}
-			else if(isdigit(s[i]))
-			{
-				return NULL;
-			}
-			else if(strlen(str) == 0)
-			{
-				str = NULL;
-				break;
-			}
-		}
-		
-			
 		i++;
 		}	
 	if(str != NULL)
 	{
-		if(num == 0)
-		{
-			printf("*%s*\n",str);
-			if ((wordsToIgnore!= NULL) && isIgnored(str, wordsToIgnore))
+		if (strlen(str) >= num)
 			{
-				return NULL;
-			}
-			else 
-			{
-			return addWord(first,str);
-			}
-		}
-		else
-		{
-			if(strlen(str) >= num)
-			{
-				printf("*%s*\n",str);
-				if ((wordsToIgnore != NULL) && isIgnored(str, wordsToIgnore))
-				{
+				if((wordsToIgnore != NULL) && isIgnored(str, wordsToIgnore))
 					return NULL;
-				}
-				else 
+				else
 				{
-				return addWord(first,str);
+					printf("*%s*\n",str);
+					return addWord(first,str);
+				}
 			}
-		}
-	} 
+			else
+				return NULL;
 	}
 	return NULL;
 }
