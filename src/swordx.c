@@ -34,7 +34,7 @@ void writeOnFile();
 void writeLogFile();
 void readIgnore();
 void printHelp();
-
+char* canPath(char*);
 
 
 int isDirectory(char*);
@@ -46,6 +46,8 @@ int fileInDirUpdate(char*, int); /*list, file name, boolean is is a  sub or not*
 static node* firstNode;
 static parLog* firstLogNode;
 static char ** wordsToIgnore;
+
+extern char *canonicalize_file_name(const char*);
 
 
 int main (int argc, char *argv[]) 
@@ -183,9 +185,10 @@ void sort()
 /* controlla che il nome sia un file o una directory, nel caso in cui fosse una directory */
 void checkName(char* filename)
 {
+	filename = canPath(filename);
+	printf("\n%s\n", filename);
 	/* se non è una directory fa l'update della lista passa a updateList il file, se no
 	 *  apre la directory, controlla i file e fa l'updateList su ognuno di loro*/
-
 	if(isDirectory(filename)== 0)
 	{
 		if (isRegular(filename) == 1)
@@ -320,11 +323,12 @@ int fileInDirUpdate (char* path, int sub)
 			}
 			else if (ep -> d_name[0] != '.')
 			{
-				int sizePath =  strlen(path) + strlen(ep -> d_name);
+				int sizePath =  strlen(path) + strlen(ep -> d_name) + 1;
 				
 				char filename[sizePath];
 				
 				strcpy(filename, path);
+				strcat(filename, "/");
 				strcat(filename, ep -> d_name );
 				
 				if (isRegular(filename) == 1)
@@ -344,19 +348,21 @@ int fileInDirUpdate (char* path, int sub)
 						{
 							if (!isLink(filename))
 							{
-								char newname[sizePath + 1];
+								/*char newname[sizePath + 1];
 								strcpy(newname,filename);
 								strcat(newname, "/");
-								if (isDirectory(newname)) fileInDirUpdate(newname, 1);
+								* */
+								if (isDirectory(filename)) fileInDirUpdate(filename, 1);
 							}
 						}
 						 /*FOLLOW*/
 						if ((follow_flag == 1) && isLink(filename))
 						{
-							char newname[sizePath + 1];
+							/*char newname[sizePath + 1];
 							strcpy(newname,filename);
 							strcat(newname, "/");
-							fileInDirUpdate(newname, 1);
+							* */
+							fileInDirUpdate(filename, 1);
 						} 
 					 }
 				}
@@ -444,6 +450,13 @@ void printHelp()
 	printf("\n");
 }
 
+char* canPath(char* path)
+{
+	path = canonicalize_file_name(path);
+	if (path == NULL){
+		}
+	return path;
+	}
 
 int isDirectory(char *path) 
 {
