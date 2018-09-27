@@ -348,20 +348,12 @@ int fileInDirUpdate (char* path, int sub)
 						{
 							if (!isLink(filename))
 							{
-								/*char newname[sizePath + 1];
-								strcpy(newname,filename);
-								strcat(newname, "/");
-								* */
 								if (isDirectory(filename)) fileInDirUpdate(filename, 1);
 							}
 						}
 						 /*FOLLOW*/
 						if ((follow_flag == 1) && isLink(filename))
 						{
-							/*char newname[sizePath + 1];
-							strcpy(newname,filename);
-							strcat(newname, "/");
-							* */
 							fileInDirUpdate(filename, 1);
 						} 
 					 }
