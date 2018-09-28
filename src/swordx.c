@@ -21,9 +21,9 @@ static char *fileToExclude;
 static int numMin = 0;
 static char *wordToIgnore = NULL;
 static char *logFile;
+char *outputFile = "swordx.out";
 
 int count[2] = {0,0};
-char *outputFile = "sword.out";
 
 void sort();
 void checkName(char*);
