@@ -50,7 +50,7 @@ node* updateOccurrence(node* n)
  * */
 node* storeString(node* first, char s[], int af, int num, char ** wordsToIgnore)
 {
-	char* str= calloc(strlen(s),sizeof(char)); 
+	char* str = calloc(strlen(s),sizeof(char)); 
 	
 	int i = 0;
 	int z = 0;
@@ -69,29 +69,30 @@ node* storeString(node* first, char s[], int af, int num, char ** wordsToIgnore)
 		else 
 		{
 			z--;
-			}
+		}
 		i++;
 		z++;	
 	}
+	
 	if(strlen(str) == 0)
-		{
+	{
 			str = NULL;
-		}
+	}
 	
 	if(str != NULL)
 	{
 		
 		if (strlen(str) >= num)
-			{
-				if((wordsToIgnore != NULL) && isIgnored(str, wordsToIgnore))
-					return NULL;
-				else
-				{
-					return addWord(first,str);
-				}
-			}
-			else
+		{
+			if((wordsToIgnore != NULL) && isIgnored(str, wordsToIgnore))
 				return NULL;
+			else
+			{
+				return addWord(first,str);
+			}
+		}
+		else
+			return NULL;
 	}
 	
 	return NULL;
