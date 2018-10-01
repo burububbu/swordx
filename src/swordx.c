@@ -183,7 +183,12 @@ void sort()
 /* controlla che il nome sia un file o una directory, nel caso in cui fosse una directory */
 void checkName(char* filename)
 {
-	filename = canPath(filename);
+	char* file = canPath(filename);
+	if (file == NULL){
+		printf("Percorso '%s' non valido\r\n",filename);
+		exit(EXIT_FAILURE);
+		}
+	filename=file;
 	/* se non è una directory fa l'update della lista passa a updateList il file, se no
 	 *  apre la directory, controlla i file e fa l'updateList su ognuno di loro*/
 	if(isDirectory(filename)== 0)
