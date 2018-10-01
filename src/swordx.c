@@ -27,8 +27,8 @@ int count[2] = {0,0};
 
 void sort();
 void checkName(char*);
-int* counter(node*);
-int* updateList(char*);
+void counter(node*);
+void updateList(char*);
 void UpdateListwLog(char*);
 void writeOnFile();
 void writeLogFile();
@@ -206,22 +206,16 @@ void checkName(char* filename)
 		fileInDirUpdate(filename);
 }
 
-int* counter(node* nod)
+void counter(node* nod)
 {
-	int* c;
-	
 	if(nod != NULL)
 		count[0] += 1;
 	else
 		count[1] += 1;
-	
-	c = count;
-	return c;
 }
 
-int* updateList(char* filename)
+void updateList(char* filename)
 {
-	int *c;
 	FILE *fd;
 	char buf[40];
 	node* app;
@@ -240,16 +234,15 @@ int* updateList(char* filename)
 			if (firstNode == NULL)
 			{
 				firstNode = storeString(firstNode,buf,alpha_flag,numMin, wordsToIgnore);
-				c = counter(firstNode);
+				counter(firstNode);
 			}
 			else 
 			{
 				app = storeString(firstNode,buf,alpha_flag,numMin,wordsToIgnore);
-				c = counter(app);
+				counter(app);
 			}
 		}
 	}
-	return c;
 }
 
 void writeOnFile()
@@ -368,14 +361,13 @@ int fileInDirUpdate (char* path)
 
 void UpdateListwLog(char* filename)
 {
-	int *num;
-
 	clock_t t;
 	t = clock();
 	
-	num = updateList(filename);
-	parLog* n =createLogNode(filename, num[0], num[1], firstLogNode);
-	if (firstLogNode == NULL) firstLogNode = n;
+	updateList(filename);
+	parLog* n =createLogNode(filename, count[0], count[1], firstLogNode);
+	if (firstLogNode == NULL) 
+		firstLogNode = n;
 	
 	t = clock() - t;
 	
@@ -441,10 +433,12 @@ void printHelp()
 char* canPath(char* path)
 {
 	path = canonicalize_file_name(path);
-	if (path == NULL){
-		}
-	return path;
+	
+	if (path == NULL)
+	{
 	}
+	return path;
+}
 
 int isDirectory(char *path) 
 {
