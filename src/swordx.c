@@ -183,12 +183,7 @@ void sort()
 /* controlla che il nome sia un file o una directory, nel caso in cui fosse una directory */
 void checkName(char* filename)
 {
-	char* file = canPath(filename);
-	if (file == NULL){
-		printf("Percorso '%s' non valido\r\n",filename);
-		exit(EXIT_FAILURE);
-		}
-	filename=file;
+	filename = canPath(filename);
 	/* se non è una directory fa l'update della lista passa a updateList il file, se no
 	 *  apre la directory, controlla i file e fa l'updateList su ognuno di loro*/
 	if(isDirectory(filename)== 0)
@@ -432,12 +427,14 @@ void printHelp()
 
 char* canPath(char* path)
 {
-	path = canonicalize_file_name(path);
+	char* newpath = canonicalize_file_name(path);
 	
-	if (path == NULL)
+	if (newpath == NULL)
 	{
+		printf("Percorso '%s' non valido\r\n",path);
+		exit(EXIT_FAILURE);
 	}
-	return path;
+	return newpath;
 }
 
 int isDirectory(char *path) 
