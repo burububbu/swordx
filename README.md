@@ -1,1 +1,1 @@
-Swordx for Operating System project
+Swordx for Operating Systems project
